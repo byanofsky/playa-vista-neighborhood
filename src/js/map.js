@@ -1,9 +1,5 @@
 var locations = [
   {
-    name: 'Test Broken',
-    address: '1212 South Fake Street, Los Angeles, CA 90094'
-  },
-  {
     name: 'YouTube Spaces',
     address: '12422 Bluff Creek Dr, Los Angeles, CA 90094'
   },
