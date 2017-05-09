@@ -9,7 +9,7 @@ module.exports = function(grunt) {
     watch: {
       scripts: {
         files: 'src/**/*.js',
-        tasks: ['jshint']
+        tasks: ['jshint', 'uglify']
       },
       styles: {
         files: 'src/**/*.css',
@@ -56,6 +56,14 @@ module.exports = function(grunt) {
           ext: '.min.css'
         }]
       }
+    },
+    uglify: {
+      target: {
+        files: {
+          'dist/js/app.min.js': ['src/js/app.js'],
+          'dist/js/map.min.js': ['src/js/map.js']
+        }
+      }
     }
   });
 
@@ -64,6 +72,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-htmlmin');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
 
   // Default task(s).
   grunt.registerTask('default', ['jshint']);
