@@ -121,10 +121,17 @@ function initMap() {
   var map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 33.972536, lng: -118.426561},
     scrollwheel: false,
-    zoom: 14,
+    zoom: 15,
     mapTypeControlOptions: {
         mapTypeIds: ['styled_map', 'roadmap']
       }
+  });
+
+  var marker = new google.maps.Marker({
+    position: {lat: 33.976977, lng: -118.407325},
+    map: map,
+    title: 'Hello World!',
+    animation: google.maps.Animation.DROP
   });
 
   // Associate the styled map with the MapTypeId and set it to display.
