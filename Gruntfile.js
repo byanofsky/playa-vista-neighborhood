@@ -10,6 +10,10 @@ module.exports = function(grunt) {
       scripts: {
         files: 'src/**/*.js',
         tasks: ['jshint']
+      },
+      html: {
+        files: 'src/**/*.html',
+        tasks: ['htmlmin']
       }
     },
     copy: {
