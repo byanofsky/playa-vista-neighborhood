@@ -1,3 +1,5 @@
+var app = app || {};
+
 var locations = [
   {
     name: 'YouTube Spaces',
@@ -34,3 +36,7 @@ var ViewModel = function(locations) {
 };
 
 ko.applyBindings(new ViewModel(locations));
+
+app.launchApp = function() {
+  getPlaceSearch();
+};

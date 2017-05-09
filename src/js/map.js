@@ -1,3 +1,5 @@
+var app = app || {};
+
 var locations = [
   {
     name: 'YouTube Spaces',
@@ -29,12 +31,16 @@ var locations = [
   }
 ];
 
-function initMap() {
-  // Store all markers in this array
-  var markers = [];
+// Initialize map
+var map;
+// Store all markers in this array
+var markers = [];
+// Initialize geocoding service
+var geocoder;
+// Initialize places service
+var placesService;
 
-  // Initialize geocoding service
-  var geocoder = new google.maps.Geocoder();
+function initMap() {
 
   // Map style from https://snazzymaps.com/style/27/shift-worker
   var styledMapType = new google.maps.StyledMapType(
@@ -155,7 +161,7 @@ function initMap() {
     ], {name: 'Styled Map'});
 
   // Create a map object and specify the DOM element for display.
-  var map = new google.maps.Map(document.getElementById('map'), {
+  map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 33.972536, lng: -118.426561},
     scrollwheel: false,
     zoom: 15,
@@ -168,10 +174,16 @@ function initMap() {
   map.mapTypes.set('styled_map', styledMapType);
   map.setMapTypeId('styled_map');
 
+  // Initialize geocoder service
+  geocoder = new google.maps.Geocoder();
+  // Initialize places service
+  placesService = new google.maps.places.PlacesService(map);
+
   // Cycle through location addresses and create markers on map
   for (var i = 0; i < locations.length; i++) {
     geocodeAddressToMarker(locations[i], map, geocoder, markers);
   }
+  app.launchApp();
 }
 
 // Turns a location into a location using geocode service, and creates marker
@@ -196,4 +208,14 @@ function createMarker(position, map, title) {
     animation: google.maps.Animation.DROP
   });
   return marker;
+}
+
+// Performs a places search, centered on current map location
+function getPlaceSearch(keyword) {
+  placesService.nearbySearch({
+    location: map.getCenter(),
+    radius: 500,
+  }, function(results, status) {
+    console.log(results);
+  });
 }
