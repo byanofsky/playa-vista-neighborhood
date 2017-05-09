@@ -123,8 +123,7 @@ function initMap() {
     scrollwheel: false,
     zoom: 14,
     mapTypeControlOptions: {
-        mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain',
-                     'styled_map']
+        mapTypeIds: ['styled_map', 'roadmap']
       }
   });
 
