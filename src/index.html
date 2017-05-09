@@ -23,7 +23,14 @@
     <![endif]-->
   </head>
   <body>
-    <div id="map"></div>
+    <div class="container">
+      <div id="list">
+        <ul data-bind="foreach: locations">
+          <li data-bind="text: name"></li>
+        </ul>
+      </div>
+      <div id="map"></div>
+    </div>
     <script src="js/map.min.js"></script>
     <!-- jQuery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
