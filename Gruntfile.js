@@ -11,6 +11,10 @@ module.exports = function(grunt) {
         files: 'src/**/*.js',
         tasks: ['jshint']
       },
+      styles: {
+        files: 'src/**/*.css',
+        tasks: ['cssmin']
+      },
       html: {
         files: 'src/**/*.html',
         tasks: ['htmlmin']
@@ -41,6 +45,17 @@ module.exports = function(grunt) {
           'dist/index.html': 'src/index.html'
         }
       }
+    },
+    cssmin: {
+      target: {
+        files: [{
+          expand: true,
+          cwd: 'src/css',
+          src: ['*.css', '!*.min.css'],
+          dest: 'dist/css',
+          ext: '.min.css'
+        }]
+      }
     }
   });
 
@@ -48,6 +63,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-htmlmin');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
 
   // Default task(s).
   grunt.registerTask('default', ['jshint']);
