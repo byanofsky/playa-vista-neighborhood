@@ -26,12 +26,24 @@ module.exports = function(grunt) {
           }
         ]
       }
+    },
+    htmlmin: {
+      build: {
+        options: {
+          removeComments: true,
+          collapseWhitespace: true
+        },
+        files: {
+          'dist/index.html': 'src/index.html'
+        }
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-htmlmin');
 
   // Default task(s).
   grunt.registerTask('default', ['jshint']);
