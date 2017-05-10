@@ -198,10 +198,12 @@ function getPlaceSearch(keyword) {
   }, function(results, status) {
     if (status === 'OK') {
       results.forEach(function(result) {
+        // Create a marker and push to markers array and attach to location
+        var marker = createMarker(result.geometry.location, result.name);
+        markers.push(marker);
+        result.marker = marker;
         // Push each result to locations observable array
         viewModelInstance.locations.push(result);
-        // Create a marker and push to markers array
-        markers.push(createMarker(result.geometry.location, result.name));
       });
     } else {
       alert('Place Search was not successful for the following reason: ' + status);
