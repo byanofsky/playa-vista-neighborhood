@@ -37,6 +37,8 @@ var markers = [];
 var geocoder;
 // Initialize places service
 var placesService;
+// Declare info window
+var infowindow;
 
 function initMap() {
   // Map style from https://snazzymaps.com/style/27/shift-worker
@@ -175,6 +177,8 @@ function initMap() {
   geocoder = new google.maps.Geocoder();
   // Initialize places service
   placesService = new google.maps.places.PlacesService(map);
+  // Initialize infowinfow
+  infowindow = new google.maps.InfoWindow();
 
   getPlaceSearch();
 }
@@ -186,6 +190,10 @@ function createMarker(position, title) {
     position: position,
     title: title,
     animation: google.maps.Animation.DROP
+  });
+  // Add listener to fire actions when marker selected
+  marker.addListener('click', function() {
+    focusMarker(marker, title);
   });
   return marker;
 }
@@ -209,6 +217,26 @@ function getPlaceSearch(keyword) {
       alert('Place Search was not successful for the following reason: ' + status);
     }
   });
+}
+
+// Open info window and bounce marker
+function focusMarker(marker, content) {
+  openInfoWindow(marker, content);
+  markerBounce(marker);
+}
+
+// Open infowindow on marker with defined content
+function openInfoWindow(marker, content) {
+  infowindow.setContent(content);
+  infowindow.open(map, marker);
+}
+
+// Bounce marker once
+function markerBounce(marker) {
+  marker.setAnimation(google.maps.Animation.BOUNCE);
+  window.setTimeout(function() {
+    marker.setAnimation(null);
+  }, 750);
 }
 
 // Turns a location into a location using geocode service, and creates marker

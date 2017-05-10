@@ -41,6 +41,7 @@ var ViewModel = function() {
     }
     self.selectedLocation(event.target);
     $(event.target).toggleClass('active');
+    focusMarker(data.marker, data.name);
   };
 };
 
