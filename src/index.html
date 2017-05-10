@@ -25,9 +25,10 @@
   <body>
     <div class="container">
       <div id="list">
-        <ul data-bind="foreach: locations">
-          <li data-bind="text: name"></li>
-        </ul>
+        <div class="list-group" data-bind="foreach: locations">
+          <button type="button" class="list-group-item"
+                  data-bind="text: name, click: $root.toggleActive"></button>
+        </div>
       </div>
       <div id="map"></div>
     </div>

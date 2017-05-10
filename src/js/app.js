@@ -30,7 +30,18 @@ var locationsOld = [
 ];
 
 var ViewModel = function() {
-  this.locations = ko.observableArray();
+  var self = this;
+  self.locations = ko.observableArray();
+  self.selectedLocation = ko.observable();
+
+  // Behaviors
+  self.toggleActive = function(data, event) {
+    if (self.selectedLocation()) {
+      $(self.selectedLocation()).toggleClass('active');
+    }
+    self.selectedLocation(event.target);
+    $(event.target).toggleClass('active');
+  };
 };
 
 var viewModelInstance = new ViewModel();
