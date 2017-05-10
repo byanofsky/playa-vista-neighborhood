@@ -16,4 +16,5 @@ html, body {
 #list {
   height: 100%;
   width: 25%;
+  overflow: auto;
 }
