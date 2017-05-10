@@ -1,43 +1,11 @@
-var locationsOld = [
-  {
-    name: 'YouTube Spaces',
-    address: '12422 Bluff Creek Dr, Los Angeles, CA 90094'
-  },
-  {
-    name: 'Fullscreen, Inc.',
-    address: '12180 Millennium Dr, Los Angeles, CA 90094'
-  },
-  {
-    name: 'IMAX Post/DKP Inc.',
-    address: '12582 Millennium Dr, Playa Vista, CA 90094'
-  },
-  {
-    name: 'Belkin International',
-    address: '12045 Waterfront Dr, Los Angeles, CA 90094'
-  },
-  {
-    name: 'Yahoo Inc, Playa Vista. Office',
-    address: '11975 Bluff Creek Dr, Los Angeles, CA 90094'
-  },
-  {
-    name: 'Electronic Arts (EA)',
-    address: '5510 Lincoln Blvd, Playa Vista, CA 90094'
-  },
-  {
-    name: 'ICANN',
-    address: '12025 E Waterfront Dr #300, Los Angeles, CA 90094'
-  }
-];
-
-// Initialize map
+// Declare map so it can be referenced
 var map;
 // Store all markers in this array
 var markers = [];
-// Initialize geocoding service
+// Declare google api services so they can be referenced
 var geocoder;
-// Initialize places service
 var placesService;
-// Declare info window
+// Declare info window, so only one is used at a time
 var infowindow;
 
 function initMap() {
@@ -159,7 +127,7 @@ function initMap() {
       }
     ], {name: 'Styled Map'});
 
-  // Create a map object and specify the DOM element for display.
+  // Create a map object
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 33.9739136, lng: -118.4161883},
     scrollwheel: true,
@@ -180,7 +148,9 @@ function initMap() {
   // Initialize infowinfow
   infowindow = new google.maps.InfoWindow();
 
-  google.maps.event.addListenerOnce(map, 'idle', function(){
+  // Once map has loaded, perform initial search.
+  // 'idle' event thanks to: http://stackoverflow.com/a/2833067
+  google.maps.event.addListenerOnce(map, 'idle', function() {
     getPlaceSearch('restaurant');
   });
 }
