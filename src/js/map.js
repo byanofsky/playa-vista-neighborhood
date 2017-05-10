@@ -180,7 +180,9 @@ function initMap() {
   // Initialize infowinfow
   infowindow = new google.maps.InfoWindow();
 
-  getPlaceSearch();
+  google.maps.event.addListenerOnce(map, 'idle', function(){
+    getPlaceSearch('restaurant');
+  });
 }
 
 // Creates a default marker for map
@@ -201,8 +203,9 @@ function createMarker(position, title) {
 // Performs a places search, centered on current map location
 function getPlaceSearch(keyword) {
   placesService.nearbySearch({
+    keyword: keyword,
     location: map.getCenter(),
-    radius: 500,
+    rankBy: google.maps.places.RankBy.DISTANCE
   }, function(results, status) {
     if (status === 'OK') {
       results.forEach(function(result) {
