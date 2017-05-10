@@ -9,7 +9,7 @@ module.exports = function(grunt) {
     watch: {
       scripts: {
         files: 'src/**/*.js',
-        tasks: ['jshint', 'uglify']
+        tasks: ['jshint', 'uglify:dev']
       },
       styles: {
         files: 'src/**/*.css',
@@ -59,6 +59,16 @@ module.exports = function(grunt) {
     },
     uglify: {
       target: {
+        files: {
+          'dist/js/app.min.js': ['src/js/app.js'],
+          'dist/js/map.min.js': ['src/js/map.js']
+        }
+      },
+      dev: {
+        options: {
+          beautify: true,
+          compress: false
+        },
         files: {
           'dist/js/app.min.js': ['src/js/app.js'],
           'dist/js/map.min.js': ['src/js/map.js']
