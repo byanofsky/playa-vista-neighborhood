@@ -25,6 +25,12 @@
   <body>
     <div class="container">
       <div id="list">
+        <div id="filters" data-bind="foreach: types">
+          <button text="button"
+                  data-bind="value: value, text: label, click: $root.newSearch">
+            Restaurant
+          </button>
+        </div>
         <div class="list-group" data-bind="foreach: locations">
           <button type="button" class="list-group-item"
                   data-bind="text: name, click: $root.toggleActive"></button>

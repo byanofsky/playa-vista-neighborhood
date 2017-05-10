@@ -33,8 +33,26 @@ var ViewModel = function() {
   var self = this;
   self.locations = ko.observableArray();
   self.selectedLocation = ko.observable();
+  self.types = ko.observableArray(
+    [
+      {
+        value: 'restaurant',
+        label: 'Restaurants'
+      },
+      {
+        value: 'bar',
+        label: 'Bars'
+      },
+      {
+        value: 'cafe',
+        label: 'Cafes'
+      }
+    ]
+  );
 
   // Behaviors
+
+  // Toggle active class on list items
   self.toggleActive = function(data, event) {
     if (self.selectedLocation()) {
       $(self.selectedLocation()).toggleClass('active');
@@ -42,6 +60,11 @@ var ViewModel = function() {
     self.selectedLocation(event.target);
     $(event.target).toggleClass('active');
     focusMarker(data.marker, data.name);
+  };
+  // Perform a new search for locations
+  self.newSearch = function(data, event) {
+    var type = data.value;
+    getPlaceSearch(type);
   };
 };
 

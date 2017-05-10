@@ -158,7 +158,6 @@ function initMap() {
 // Creates a default marker for map
 function createMarker(position, title) {
   var marker = new google.maps.Marker({
-    map: map,
     position: position,
     title: title,
     animation: google.maps.Animation.DROP
@@ -171,15 +170,18 @@ function createMarker(position, title) {
 }
 
 // Performs a places search, centered on current map location
-function getPlaceSearch(keyword) {
+function getPlaceSearch(type) {
   placesService.nearbySearch({
     // keyword: keyword,
     location: map.getCenter(),
     radius: 1000,
-    type: 'restaurant',
+    type: type,
     rankBy: google.maps.places.RankBy.PROMINENCE
   }, function(results, status) {
     if (status === 'OK') {
+      // Clear existing markers from map, if any
+      clearMarkers();
+      viewModelInstance.locations([]);
       results.forEach(function(result) {
         // Create a marker and push to markers array and attach to location
         var marker = createMarker(result.geometry.location, result.name);
@@ -188,6 +190,7 @@ function getPlaceSearch(keyword) {
         // Push each result to locations observable array
         viewModelInstance.locations.push(result);
       });
+      setMarkersMap(map);
     } else {
       alert('Place Search was not successful for the following reason: ' + status);
     }
@@ -198,6 +201,21 @@ function getPlaceSearch(keyword) {
 function focusMarker(marker, content) {
   openInfoWindow(marker, content);
   markerBounce(marker);
+}
+
+// Clear markers
+function clearMarkers() {
+  if (markers) {
+    setMarkersMap(null);
+    markers = [];
+  }
+}
+
+// Set map for all markers
+function setMarkersMap(map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
 }
 
 // Open infowindow on marker with defined content
