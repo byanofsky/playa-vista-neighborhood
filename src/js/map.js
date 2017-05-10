@@ -161,8 +161,8 @@ function initMap() {
 
   // Create a map object and specify the DOM element for display.
   map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 33.972536, lng: -118.426561},
-    scrollwheel: false,
+    center: {lat: 33.9739136, lng: -118.4161883},
+    scrollwheel: true,
     zoom: 15,
     mapTypeControlOptions: {
         mapTypeIds: ['styled_map', 'roadmap']
