@@ -1,6 +1,4 @@
-var app = app || {};
-
-var locations = [
+var locationsOld = [
   {
     name: 'YouTube Spaces',
     address: '12422 Bluff Creek Dr, Los Angeles, CA 90094'
@@ -41,7 +39,6 @@ var geocoder;
 var placesService;
 
 function initMap() {
-
   // Map style from https://snazzymaps.com/style/27/shift-worker
   var styledMapType = new google.maps.StyledMapType(
     [
@@ -179,28 +176,11 @@ function initMap() {
   // Initialize places service
   placesService = new google.maps.places.PlacesService(map);
 
-  // Cycle through location addresses and create markers on map
-  for (var i = 0; i < locations.length; i++) {
-    geocodeAddressToMarker(locations[i], map, geocoder, markers);
-  }
-  app.launchApp();
-}
-
-// Turns a location into a location using geocode service, and creates marker
-function geocodeAddressToMarker(location, map, geocoder, markers) {
-  geocoder.geocode({
-    address: location.address
-  }, function(results, status) {
-    if (status === 'OK') {
-      markers.push(createMarker(results[0].geometry.location, map, location.name));
-    } else {
-      alert('Geocode was not successful for the following reason: ' + status);
-    }
-  });
+  getPlaceSearch();
 }
 
 // Creates a default marker for map
-function createMarker(position, map, title) {
+function createMarker(position, title) {
   var marker = new google.maps.Marker({
     map: map,
     position: position,
@@ -216,6 +196,28 @@ function getPlaceSearch(keyword) {
     location: map.getCenter(),
     radius: 500,
   }, function(results, status) {
-    console.log(results);
+    if (status === 'OK') {
+      results.forEach(function(result) {
+        // Push each result to locations observable array
+        viewModelInstance.locations.push(result);
+        // Create a marker and push to markers array
+        markers.push(createMarker(result.geometry.location, result.name));
+      });
+    } else {
+      alert('Place Search was not successful for the following reason: ' + status);
+    }
   });
 }
+
+// Turns a location into a location using geocode service, and creates marker
+// function geocodeAddressToMarker(location, map, geocoder, markers) {
+//   geocoder.geocode({
+//     address: location.address
+//   }, function(results, status) {
+//     if (status === 'OK') {
+//       markers.push(createMarker(results[0].geometry.location, map, location.name));
+//     } else {
+//       alert('Geocode was not successful for the following reason: ' + status);
+//     }
+//   });
+// }

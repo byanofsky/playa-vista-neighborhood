@@ -1,6 +1,4 @@
-var app = app || {};
-
-var locations = [
+var locationsOld = [
   {
     name: 'YouTube Spaces',
     address: '12422 Bluff Creek Dr, Los Angeles, CA 90094'
@@ -31,12 +29,10 @@ var locations = [
   }
 ];
 
-var ViewModel = function(locations) {
-  this.locations = ko.observableArray(locations);
+var ViewModel = function() {
+  this.locations = ko.observableArray();
 };
 
-ko.applyBindings(new ViewModel(locations));
+var viewModelInstance = new ViewModel();
 
-app.launchApp = function() {
-  getPlaceSearch();
-};
+ko.applyBindings(viewModelInstance);
