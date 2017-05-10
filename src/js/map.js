@@ -203,9 +203,11 @@ function createMarker(position, title) {
 // Performs a places search, centered on current map location
 function getPlaceSearch(keyword) {
   placesService.nearbySearch({
-    keyword: keyword,
+    // keyword: keyword,
     location: map.getCenter(),
-    rankBy: google.maps.places.RankBy.DISTANCE
+    radius: 1000,
+    type: 'restaurant',
+    rankBy: google.maps.places.RankBy.PROMINENCE
   }, function(results, status) {
     if (status === 'OK') {
       results.forEach(function(result) {
