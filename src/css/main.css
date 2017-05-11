@@ -2,19 +2,78 @@ html, body {
   height: 100%;
 }
 
-.container {
-  display: flex;
+.container-fluid {
   width: 100%;
-  height: 100%;
 }
 
 #map {
   height: 100%;
-  width: 75%;
+  width: 100%;
 }
 
 #list {
   height: 100%;
-  width: 25%;
   overflow: auto;
+}
+
+.navbar {
+  margin-bottom: 0;
+}
+
+#main-content {
+  height: calc(100% - 52px);
+}
+
+#main-content .row,
+#main-content .col {
+  height: 100%;
+}
+
+.col-no-gutter {
+  padding: 0;
+}
+
+/*
+ * Off Canvas - http://getbootstrap.com/examples/offcanvas/
+ * --------------------------------------------------
+ */
+@media screen and (max-width: 767px) {
+  .row-offcanvas {
+    position: relative;
+    -webkit-transition: all .25s ease-out;
+         -o-transition: all .25s ease-out;
+            transition: all .25s ease-out;
+  }
+
+  .row-offcanvas-right {
+    right: 0;
+  }
+
+  .row-offcanvas-left {
+    left: 0;
+  }
+
+  .row-offcanvas-right
+  .sidebar-offcanvas {
+    right: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left
+  .sidebar-offcanvas {
+    left: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-right.active {
+    right: 50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left.active {
+    left: 50%; /* 6 columns */
+  }
+
+  .sidebar-offcanvas {
+    position: absolute;
+    top: 0;
+    width: 50%; /* 6 columns */
+  }
 }
