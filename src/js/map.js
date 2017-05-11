@@ -9,6 +9,16 @@ var placesService;
 var infowindow;
 
 function initMap() {
+  // Create a map object
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 33.9739136, lng: -118.4161883},
+    scrollwheel: true,
+    zoom: 15,
+    mapTypeControlOptions: {
+        mapTypeIds: ['styled_map', 'roadmap']
+      }
+  });
+
   // Map style from https://snazzymaps.com/style/27/shift-worker
   var styledMapType = new google.maps.StyledMapType(
     [
@@ -126,17 +136,6 @@ function initMap() {
         ]
       }
     ], {name: 'Styled Map'});
-
-  // Create a map object
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 33.9739136, lng: -118.4161883},
-    scrollwheel: true,
-    zoom: 15,
-    mapTypeControlOptions: {
-        mapTypeIds: ['styled_map', 'roadmap']
-      }
-  });
-
   // Associate the styled map with the MapTypeId and set it to display.
   map.mapTypes.set('styled_map', styledMapType);
   map.setMapTypeId('styled_map');
@@ -155,6 +154,35 @@ function initMap() {
   });
 }
 
+// Performs a places search, centered on current map location
+function getPlaceSearch(locationType) {
+  placesService.nearbySearch({
+    location: map.getCenter(),
+    radius: 1000,
+    type: locationType,
+    rankBy: google.maps.places.RankBy.PROMINENCE
+  }, function(locations, status) {
+    if (status === 'OK') {
+      // Clear existing markers from map, if any
+      clearMarkers();
+      viewModelInstance.clearLocations();
+      locations.forEach(function(location) {
+        // Create a marker for this location
+        var marker = createMarker(location.geometry.location, location.name);
+        // Add marker to markers array
+        markers.push(marker);
+        // Add marker as property to location
+        location.marker = marker;
+        // Add location to locations observable array
+        viewModelInstance.addLocation(location);
+      });
+      setMarkersMap(map);
+    } else {
+      alert('Place Search was not successful for the following reason: ' + status);
+    }
+  });
+}
+
 // Creates a default marker for map
 function createMarker(position, title) {
   var marker = new google.maps.Marker({
@@ -169,38 +197,9 @@ function createMarker(position, title) {
   return marker;
 }
 
-// Performs a places search, centered on current map location
-function getPlaceSearch(type) {
-  placesService.nearbySearch({
-    // keyword: keyword,
-    location: map.getCenter(),
-    radius: 1000,
-    type: type,
-    rankBy: google.maps.places.RankBy.PROMINENCE
-  }, function(results, status) {
-    if (status === 'OK') {
-      // Clear existing markers from map, if any
-      clearMarkers();
-      viewModelInstance.locations([]);
-      results.forEach(function(result) {
-        // Create a marker and push to markers array and attach to location
-        var marker = createMarker(result.geometry.location, result.name);
-        markers.push(marker);
-        result.marker = marker;
-        // Push each result to locations observable array
-        viewModelInstance.locations.push(result);
-      });
-      setMarkersMap(map);
-    } else {
-      alert('Place Search was not successful for the following reason: ' + status);
-    }
-  });
-}
-
 // Open info window and bounce marker
 function focusMarker(marker, content) {
   openInfoWindow(marker, content);
-  markerBounce(marker);
 }
 
 // Clear markers

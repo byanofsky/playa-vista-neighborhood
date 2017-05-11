@@ -32,8 +32,11 @@
           </button>
         </div>
         <div class="list-group" data-bind="foreach: locations">
-          <button type="button" class="list-group-item"
-                  data-bind="text: name, click: $root.toggleActive"></button>
+          <button type="button"
+                  class="list-group-item"
+                  data-bind="text: name,
+                             click: $root.selectListItem,
+                             css: { active: $root.activeLocation() === $data }"></button>
         </div>
       </div>
       <div id="map"></div>
