@@ -46,6 +46,10 @@ var ViewModel = function() {
       {
         value: 'cafe',
         label: 'Cafes'
+      },
+      {
+        value: 'school',
+        label: 'Schools'
       }
     ]
   );
