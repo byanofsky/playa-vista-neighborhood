@@ -24,12 +24,26 @@
   </head>
   <body>
     <div class="container">
+      <!-- Slide to interact with map -->
       <div id="list">
-        <div id="filters" data-bind="foreach: types">
-          <button text="button"
-                  data-bind="value: value, text: label, click: $root.newSearch">
-            Restaurant
+        <!-- Filter -->
+        <div class="btn-group">
+          <button type="button"
+                  class="btn btn-default dropdown-toggle"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false">
+            Filter <span class="caret"></span>
           </button>
+          <ul id="filters" class="dropdown-menu" data-bind="foreach: types">
+            <li>
+              <a href="#"
+                 data-bind="value: value,
+                            text: label,
+                            click: $root.newSearch">
+              </a>
+            </li>
+          </ul>
         </div>
         <div class="list-group" data-bind="foreach: locations">
           <button type="button"
