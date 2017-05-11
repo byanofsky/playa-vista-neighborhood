@@ -25,6 +25,13 @@
   <body>
     <nav class="navbar navbar-default">
       <div class="container-fluid">
+        <button type="button" class="navbar-left offcanvas-toggle" data-toggle="offcanvas">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
           <button type="button" class="navbar-left navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -35,14 +42,6 @@
           </button>
           <a class="navbar-brand" href="#">Playa Vista</a>
         </div>
-
-        <button type="button" class="navbar-left" data-toggle="offcanvas">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span>Toggle OffCanvas</span>
-        </button>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -61,7 +60,7 @@
     </nav>
     <div id="main-content" class="container-fluid">
       <div class="row row-offcanvas row-offcanvas-left">
-        <div class="col col-no-gutter col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+        <div id="list-container" class="col col-no-gutter col-xs-3 sidebar-offcanvas">
           <div id="list">
             <!-- Filter -->
             <div class="btn-group">
@@ -91,7 +90,7 @@
             </div><!--/.list-group-->
           </div><!--/#list-->
         </div><!--/.sidebar-offcanvas-->
-        <div class="col col-no-gutter col-xs-12 col-sm-9">
+        <div id="map-container" class="col col-no-gutter">
           <div id="map"></div>
         </div>
       </div><!--/.row-offcanvas-->
