@@ -5,10 +5,8 @@ var ViewModel = function() {
   self.activeLocation = ko.observable();
   self.types = ko.observableArray(
     [
-      { value: 'restaurant', label: 'Restaurants' },
-      { value: 'bar', label: 'Bars' },
-      { value: 'cafe', label: 'Cafes' },
-      { value: 'school', label: 'Schools' }
+      { value: 'italian', label: 'Italian' },
+      { value: 'japanese', label: 'Japanese' }
     ]
   );
 
@@ -45,10 +43,22 @@ var ViewModel = function() {
       self.displayAllMarkers();
     });
   };
+  // Action for when a filter is selected
+  self.filter = function(data) {
+    self.removeAllMarkers();
+    self.locations.removeAll();
+    self.yelpSearch(data.value, 'playa vista');
+  };
   // Display markers on google map
   self.displayAllMarkers = function() {
     self.locations().forEach(function(location) {
       location.marker.setMap(map);
+    });
+  };
+  // Remove all markers from google map
+  self.removeAllMarkers = function() {
+    self.locations().forEach(function(location) {
+      location.marker.setMap(null);
     });
   };
   // Toggle active class on list items
