@@ -49,6 +49,7 @@ var ViewModel = function() {
   self.filter = function(data) {
     self.removeAllMarkers();
     self.locations.removeAll();
+    map.setCenter(playaVistaCenter);
     self.yelpSearch(data.value, 'playa vista');
   };
   // Display markers on google map
