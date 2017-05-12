@@ -8,6 +8,7 @@ app.secret_key = FLASK_SECRET_KEY
 def yelp_search():
     categories = request.args.get('categories')
     location = request.args.get('location')
+    radius = request.args.get('radius')
     bearer_token = session.get('yelpapi_bearer_token')
     bearer_token = yelpapi.get_bearer_token(bearer_token)
     session['yelpapi_bearer_token'] = bearer_token
@@ -15,7 +16,8 @@ def yelp_search():
         bearer_token,
         categories,
         location,
-        20
+        20,
+        radius
     )
     print(search_results)
     if (search_results.get('error') and

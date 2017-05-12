@@ -6,7 +6,8 @@ var ViewModel = function() {
   self.types = ko.observableArray(
     [
       { value: 'italian', label: 'Italian' },
-      { value: 'japanese', label: 'Japanese' }
+      { value: 'japanese', label: 'Japanese' },
+      { value: 'pizza', label: 'Pizza' }
     ]
   );
 
@@ -17,7 +18,8 @@ var ViewModel = function() {
     var url = "http://localhost:5000/";
     $.getJSON( url, {
       categories: categories,
-      location: location
+      location: location,
+      radius: '4000' // 4000 meters ~= 3 miles
     }, function( data ) {
       // Map needed data to an object
       data.businesses.forEach(function(business) {
