@@ -13,7 +13,42 @@ var ViewModel = function() {
   );
 
   // Behaviors
-
+  // Perform yelp search, using search `term` and `location`
+  self.yelpSearch = function(term, location) {
+    // Internal URL to return results from search
+    var url = "http://localhost:5000/";
+    $.getJSON( url, {
+      term: term,
+      location: location
+    }, function( data ) {
+      // Map needed data to an object
+      data.businesses.forEach(function(business) {
+        var location = {
+          name: business.name,
+          // Store position in a format usable by google maps
+          position: {
+            lat: business.coordinates.latitude,
+            lng: business.coordinates.longitude
+          },
+          location: business.location,
+          price: business.price,
+          categoies: business.categories,
+          rating: business.rating
+        };
+        // Create a marker for this location, and assign to location
+        location.marker = createMarker(location.position, location.name);
+        // Push marker to markers array within map
+        markers.push(location.marker);
+        // Add new location to `locations` observable array
+        self.locations.push(location);
+      });
+      self.displayMarkers();
+    });
+  };
+  // Display markers on google map
+  self.displayMarkers = function() {
+    setMarkersMap(map);
+  };
   // Toggle active class on list items
   self.selectListItem = function(location) {
     self.activeLocation(location);
@@ -36,33 +71,10 @@ var ViewModel = function() {
   self.newSearch = function(type) {
     getPlaceSearch(type.value);
   };
-  // Perform yelp restaurant search
-  self.yelpSearch = function(search, location) {
-    var url = "http://localhost:5000/";
-    $.getJSON( url, {
-      search: 'restaurants',
-      location: 'playa vista'
-    }, function( data ) {
-      console.log(data);
-      self.clearLocationsAndMarkers();
-      for (var i = 0; i < data.businesses.length; i++) {
-        var businessData = data.businesses[i];
-        var business = {
-          name: businessData.name,
-          position: {
-            lat: businessData.coordinates.latitude,
-            lng: businessData.coordinates.longitude
-          }
-        };
-        self.locations.push(business);
-        var marker = createMarker(business.position, business.name);
-        markers.push(marker);
-      }
-      setMarkersMap(map);
-    });
-  };
 };
 
 var viewModelInstance = new ViewModel();
 
 ko.applyBindings(viewModelInstance);
+
+viewModelInstance.yelpSearch('restaurants', 'playa vista');

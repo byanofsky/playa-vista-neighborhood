@@ -150,7 +150,18 @@ function initMap() {
   // Once map has loaded, perform initial search.
   // 'idle' event thanks to: http://stackoverflow.com/a/2833067
   google.maps.event.addListenerOnce(map, 'idle', function() {
-    getPlaceSearch('restaurant');
+    createAndShowMarkers(viewModelInstance.locations());
+  });
+}
+
+// Create markers and display them on the map from a set of locations
+function createAndShowMarkers(locations) {
+  console.dir(locations);
+  locations.forEach(function(location) {
+    var marker = createMarker(location.position, location.title);
+    console.log(marker);
+    marker.setMap(map);
+    markers.push(marker);
   });
 }
 
