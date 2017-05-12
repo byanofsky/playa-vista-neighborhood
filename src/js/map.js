@@ -1,11 +1,13 @@
-// Declare map so it can be referenced
+// Declare variables to reference outside initMap
+// Google map
 var map;
-// Store all markers in this array
+// TODO: remove
+// All map markers
 var markers = [];
-// Declare google api services so they can be referenced
+// Google API Services
 var geocoder;
 var placesService;
-// Declare info window, so only one is used at a time
+// Google maps info window
 var infowindow;
 
 function initMap() {
@@ -15,10 +17,11 @@ function initMap() {
     scrollwheel: true,
     zoom: 15,
     mapTypeControlOptions: {
-        mapTypeIds: ['styled_map', 'roadmap']
-      }
+      mapTypeIds: ['styled_map', 'roadmap']
+    }
   });
 
+  // TODO: remove map style
   // Map style from https://snazzymaps.com/style/27/shift-worker
   var styledMapType = new google.maps.StyledMapType(
     [
@@ -146,52 +149,6 @@ function initMap() {
   placesService = new google.maps.places.PlacesService(map);
   // Initialize infowinfow
   infowindow = new google.maps.InfoWindow();
-
-  // Once map has loaded, perform initial search.
-  // 'idle' event thanks to: http://stackoverflow.com/a/2833067
-  google.maps.event.addListenerOnce(map, 'idle', function() {
-    createAndShowMarkers(viewModelInstance.locations());
-  });
-}
-
-// Create markers and display them on the map from a set of locations
-function createAndShowMarkers(locations) {
-  console.dir(locations);
-  locations.forEach(function(location) {
-    var marker = createMarker(location.position, location.title);
-    console.log(marker);
-    marker.setMap(map);
-    markers.push(marker);
-  });
-}
-
-// Performs a places search, centered on current map location
-function getPlaceSearch(locationType) {
-  placesService.nearbySearch({
-    location: map.getCenter(),
-    radius: 1000,
-    type: locationType,
-    rankBy: google.maps.places.RankBy.PROMINENCE
-  }, function(locations, status) {
-    if (status === 'OK') {
-      // Clear existing markers from map, if any
-      clearMarkers();
-      viewModelInstance.clearLocations();
-      locations.forEach(function(location) {
-        // Create a marker for this location
-        var marker = createMarker(location.geometry.location, location.name);
-        // Add marker to markers array
-        markers.push(marker);
-        // Add marker as property to location
-        location.marker = marker;
-        // Add location to locations observable array
-        viewModelInstance.addLocation(location);
-      });
-      setMarkersMap(map);
-    } else {
-      alert('Place Search was not successful for the following reason: ' + status);
-    }
-  });
 }
 
 // Creates a default marker for map
@@ -208,38 +165,15 @@ function createMarker(position, title) {
   return marker;
 }
 
-// Open info window and bounce marker
+// When marker focused on (ie, click from list item), open info window
 function focusMarker(marker, content) {
   openInfoWindow(marker, content);
-}
-
-// Clear markers
-function clearMarkers() {
-  if (markers) {
-    setMarkersMap(null);
-    markers = [];
-  }
-}
-
-// Set map for all markers
-function setMarkersMap(map) {
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(map);
-  }
 }
 
 // Open infowindow on marker with defined content
 function openInfoWindow(marker, content) {
   infowindow.setContent(content);
   infowindow.open(map, marker);
-}
-
-// Bounce marker once
-function markerBounce(marker) {
-  marker.setAnimation(google.maps.Animation.BOUNCE);
-  window.setTimeout(function() {
-    marker.setAnimation(null);
-  }, 750);
 }
 
 // Turns a location into a location using geocode service, and creates marker

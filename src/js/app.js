@@ -42,34 +42,19 @@ var ViewModel = function() {
         // Add new location to `locations` observable array
         self.locations.push(location);
       });
-      self.displayMarkers();
+      self.displayAllMarkers();
     });
   };
   // Display markers on google map
-  self.displayMarkers = function() {
-    setMarkersMap(map);
+  self.displayAllMarkers = function() {
+    self.locations().forEach(function(location) {
+      location.marker.setMap(map);
+    });
   };
   // Toggle active class on list items
   self.selectListItem = function(location) {
     self.activeLocation(location);
     focusMarker(location.marker, location.name);
-  };
-  // Add a location to observable array
-  self.addLocation = function(location) {
-    self.locations.push(location);
-  };
-  // Clear all locations from observable array
-  self.clearLocations = function() {
-    self.locations.removeAll();
-  };
-  // Remove all locations and map markers
-  self.clearLocationsAndMarkers = function() {
-    self.clearLocations();
-    clearMarkers();
-  };
-  // Perform a new search for locations
-  self.newSearch = function(type) {
-    getPlaceSearch(type.value);
   };
 
   // Load initial data
