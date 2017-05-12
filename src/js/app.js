@@ -71,10 +71,11 @@ var ViewModel = function() {
   self.newSearch = function(type) {
     getPlaceSearch(type.value);
   };
+
+  // Load initial data
+  self.yelpSearch('restaurants', 'playa vista');
 };
 
 var viewModelInstance = new ViewModel();
 
 ko.applyBindings(viewModelInstance);
-
-viewModelInstance.yelpSearch('restaurants', 'playa vista');
