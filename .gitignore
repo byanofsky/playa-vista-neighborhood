@@ -1,4 +1,6 @@
 .*
+*.pyc
+venv/
 config.py
 node_modules/
 dist/
