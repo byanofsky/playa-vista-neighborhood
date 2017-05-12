@@ -20,4 +20,6 @@ def yelp_search():
             search_results['error']['code'] == 'TOKEN_INVALID'):
         return (jsonify(search_results), 401)
     else:
-        return jsonify(search_results)
+        return (jsonify(search_results),
+                200,
+                {'Access-Control-Allow-Origin': 'http://localhost:8000'})
