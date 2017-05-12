@@ -18,6 +18,10 @@ module.exports = function(grunt) {
       html: {
         files: 'src/**/*.html',
         tasks: ['htmlmin']
+      },
+      python: {
+        files: 'src/**/*.py',
+        tasks: ['copy:python']
       }
     },
     copy: {
@@ -31,6 +35,16 @@ module.exports = function(grunt) {
             rename: function (dest, src) {
               return dest + 'knockout.js';
             }
+          }
+        ]
+      },
+      python: {
+        files: [
+          {
+            expand: true,
+            flatten: true,
+            src: 'src/**/*.py',
+            dest: 'dist/'
           }
         ]
       }
