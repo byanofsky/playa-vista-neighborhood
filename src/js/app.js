@@ -13,12 +13,12 @@ var ViewModel = function() {
   );
 
   // Behaviors
-  // Perform yelp search, using search `term` and `location`
-  self.yelpSearch = function(term, location) {
+  // Perform yelp search, using search `categories` and `location`
+  self.yelpSearch = function(categories, location) {
     // Internal URL to return results from search
     var url = "http://localhost:5000/";
     $.getJSON( url, {
-      term: term,
+      categories: categories,
       location: location
     }, function( data ) {
       // Map needed data to an object

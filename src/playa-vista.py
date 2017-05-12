@@ -6,14 +6,14 @@ app.secret_key = FLASK_SECRET_KEY
 
 @app.route('/')
 def yelp_search():
-    term = request.args.get('term')
+    categories = request.args.get('categories')
     location = request.args.get('location')
     bearer_token = session.get('yelpapi_bearer_token')
     bearer_token = yelpapi.get_bearer_token(bearer_token)
     session['yelpapi_bearer_token'] = bearer_token
     search_results = yelpapi.search(
         bearer_token,
-        term,
+        categories,
         location,
         20
     )
