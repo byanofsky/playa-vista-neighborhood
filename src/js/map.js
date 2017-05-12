@@ -168,6 +168,15 @@ function createMarker(position, title) {
   return marker;
 }
 
+// Adjust map bounds to fit all location markers
+function fitLocationMarkers(locations) {
+  var bounds = new google.maps.LatLngBounds();
+  locations.forEach(function(location) {
+    bounds.extend(location.position);
+  });
+  map.fitBounds(bounds);
+}
+
 // When marker focused on (ie, click from list item), open info window
 function focusMarker(marker, content) {
   openInfoWindow(marker, content);

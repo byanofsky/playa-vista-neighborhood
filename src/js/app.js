@@ -43,6 +43,7 @@ var ViewModel = function() {
         self.locations.push(location);
       });
       self.displayAllMarkers();
+      fitLocationMarkers(self.locations());
     });
   };
   // Action for when a filter is selected
