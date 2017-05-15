@@ -212,6 +212,11 @@ function populateInfoWindow(business) {
     }).join(', ');
     content += '</div>';
   }
+  if (business.location.display_address) {
+    content += '<div><div>Address:</div>';
+    content += business.location.display_address.join('<br>');
+    content += '</div>';
+  }
   infowindow.setContent(content);
 }
 
