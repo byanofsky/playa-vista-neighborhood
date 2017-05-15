@@ -19,6 +19,7 @@ var ViewModel = function() {
     $.getJSON( url, {
       categories: categories,
       location: location,
+      limit: 5,
       radius: '4000' // 4000 meters ~= 3 miles
     }, function( data ) {
       console.log(data);
