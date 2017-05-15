@@ -4,7 +4,7 @@ var ViewModel = function() {
   self.locations = ko.observableArray();
   self.activeLocation = ko.observable();
   // Track which items are being shown
-  self.activeSearch = ko.observable('restaurants');
+  self.activeSearch = ko.observable({value: 'restaurants', label: 'All Restaurants'});
   self.types = ko.observableArray(
     [
       { value: 'italian', label: 'Italian' },
@@ -56,7 +56,7 @@ var ViewModel = function() {
   // Change what search results are shown
   self.newSearch = function(category) {
     // Only run is this is a new search (not same as active search)
-    if (self.activeSearch() !== category) {
+    if (self.activeSearch().value !== category.value) {
       // Set active search to category
       self.activeSearch(category);
       // Reset markers, locations, and map to default
@@ -64,17 +64,17 @@ var ViewModel = function() {
       self.locations.removeAll();
       map.setCenter(playaVistaCenter);
       // Perform yelp search
-      self.yelpSearch(category, 'playa vista');
+      self.yelpSearch(category.value, 'playa vista');
     }
   };
   // Display all locations
   self.filterAll = function() {
-    self.newSearch('restaurants');
+    self.newSearch({value: 'restaurants', label: 'All Restaurants'});
   };
   // Action for when a filter is selected
   self.filter = function(data) {
     // Category is the value of the element
-    self.newSearch(data.value);
+    self.newSearch(data);
   };
   // Display markers on google map
   self.displayAllMarkers = function() {
