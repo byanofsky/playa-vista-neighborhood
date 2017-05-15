@@ -163,15 +163,16 @@ function initMap() {
 }
 
 // Creates a default marker for map
-function createMarker(position, title) {
+function createMarker(position, location) {
   var marker = new google.maps.Marker({
     position: position,
-    title: title,
-    animation: google.maps.Animation.DROP
+    title: location.name,
+    animation: google.maps.Animation.DROP,
+    location: location
   });
   // Add listener to fire actions when marker selected
   marker.addListener('click', function() {
-    focusMarker(marker, title);
+    selectMarker(marker, location);
   });
   return marker;
 }
@@ -186,14 +187,32 @@ function fitLocationMarkers(locations) {
 }
 
 // When marker focused on (ie, click from list item), open info window
-function focusMarker(marker, content) {
-  openInfoWindow(marker, content);
+function selectMarker(marker, business) {
+  openInfoWindow(marker, business);
 }
 
 // Open infowindow on marker with defined content
-function openInfoWindow(marker, content) {
-  infowindow.setContent(content);
+function openInfoWindow(marker, business) {
+  populateInfoWindow(business);
   infowindow.open(map, marker);
+}
+
+// Populate info window with business information
+function populateInfoWindow(business) {
+  console.log(business);
+  var content = '';
+  content += '<div>' + business.name + '</div>';
+  content += '<div>Rating: ' + business.rating || 'N/A' + '</div>';
+  // Check if there are categories
+  if (business.categories) {
+    content += '<div>Categories: ';
+    // Loop through categories and add their title
+    content += business.categories.map(function(category) {
+      return category.title;
+    }).join(', ');
+    content += '</div>';
+  }
+  infowindow.setContent(content);
 }
 
 // Turns a location into a location using geocode service, and creates marker

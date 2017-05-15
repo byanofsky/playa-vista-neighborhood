@@ -21,10 +21,13 @@ var ViewModel = function() {
       location: location,
       radius: '4000' // 4000 meters ~= 3 miles
     }, function( data ) {
+      console.log(data);
       // Map needed data to an object
       data.businesses.forEach(function(business) {
         var location = {
+          id: business.id,
           name: business.name,
+          url: business.url,
           // Store position in a format usable by google maps
           position: {
             lat: business.coordinates.latitude,
@@ -32,11 +35,12 @@ var ViewModel = function() {
           },
           location: business.location,
           price: business.price,
-          categoies: business.categories,
-          rating: business.rating
+          categories: business.categories,
+          rating: business.rating,
+          phone: business.phone
         };
         // Create a marker for this location, and assign to location
-        location.marker = createMarker(location.position, location.name);
+        location.marker = createMarker(location.position, location);
         // Push marker to markers array within map
         markers.push(location.marker);
         // Add new location to `locations` observable array
@@ -68,7 +72,7 @@ var ViewModel = function() {
   // Toggle active class on list items
   self.selectListItem = function(location) {
     self.activeLocation(location);
-    focusMarker(location.marker, location.name);
+    selectMarker(location.marker, location);
   };
 
   // Load initial data
