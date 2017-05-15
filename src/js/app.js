@@ -3,6 +3,8 @@ var ViewModel = function() {
 
   self.locations = ko.observableArray();
   self.activeLocation = ko.observable();
+  // Track which items are being shown
+  self.activeSearch = ko.observable('all');
   self.types = ko.observableArray(
     [
       { value: 'italian', label: 'Italian' },
@@ -51,12 +53,26 @@ var ViewModel = function() {
       fitLocationMarkers(self.locations());
     });
   };
+  // Display all locations
+  self.displayAllItems = function() {
+    // If already showing item category, don't run again
+    if (self.activeSearch() !== 'all') {
+      self.removeAllMarkers();
+      self.locations.removeAll();
+      map.setCenter(playaVistaCenter);
+      self.yelpSearch('restaurants', 'playa vista');
+      self.activeSearch('all');
+    }
+  };
   // Action for when a filter is selected
   self.filter = function(data) {
-    self.removeAllMarkers();
-    self.locations.removeAll();
-    map.setCenter(playaVistaCenter);
-    self.yelpSearch(data.value, 'playa vista');
+    if (self.activeSearch() !== data.value) {
+      self.removeAllMarkers();
+      self.locations.removeAll();
+      map.setCenter(playaVistaCenter);
+      self.yelpSearch(data.value, 'playa vista');
+      self.activeSearch(data.value);
+    }
   };
   // Display markers on google map
   self.displayAllMarkers = function() {
