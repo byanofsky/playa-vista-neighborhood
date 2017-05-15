@@ -152,6 +152,14 @@ function initMap() {
   placesService = new google.maps.places.PlacesService(map);
   // Initialize infowinfow
   infowindow = new google.maps.InfoWindow();
+
+  // Toogle off canvas list once map has loaded
+  google.maps.event.addListenerOnce(map, 'idle', function() {
+    // Show offcanvas menu by default when window >= 768
+    if ($(window).width() >= 768) {
+      toggleOffcanvas();
+    }
+  });
 }
 
 // Creates a default marker for map
