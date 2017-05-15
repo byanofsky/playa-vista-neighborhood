@@ -3,8 +3,7 @@ var ViewModel = function() {
 
   self.locations = ko.observableArray();
   self.activeLocation = ko.observable();
-  // Track which items are being shown
-  self.activeSearch = ko.observable({value: 'restaurants', label: 'All Restaurants'});
+  self.defaultType = { value: 'restaurants', label: 'All Restaurants' };
   self.types = ko.observableArray(
     [
       { value: 'italian', label: 'Italian' },
@@ -12,6 +11,8 @@ var ViewModel = function() {
       { value: 'pizza', label: 'Pizza' }
     ]
   );
+  // Track which items are being shown
+  self.activeSearch = ko.observable(self.defaultType);
 
   // Behaviors
   // Perform yelp search, using search `categories` and `location`
@@ -69,7 +70,7 @@ var ViewModel = function() {
   };
   // Display all locations
   self.filterAll = function() {
-    self.newSearch({value: 'restaurants', label: 'All Restaurants'});
+    self.newSearch(self.defaultType);
   };
   // Action for when a filter is selected
   self.filter = function(data) {
