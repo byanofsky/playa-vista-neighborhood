@@ -87,6 +87,18 @@ var ViewModel = function() {
     // Category is the value of the element
     self.newSearch(data);
   };
+  // Get and show categories
+  self.showCategories = function() {
+    // Internal URL to return results from search
+    var url = "http://localhost:5000/categories/";
+    $.getJSON( url, {
+      categories: 'restaurants',
+      location: 'playa vista',
+      radius: '4000' // 4000 meters ~= 3 miles
+    }, function( data ) {
+      console.log(data);
+    });
+  };
   // Display markers on google map
   self.displayAllMarkers = function() {
     self.locations().forEach(function(location) {
