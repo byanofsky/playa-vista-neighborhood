@@ -159,6 +159,8 @@ function initMap() {
     if ($(window).width() >= 768) {
       toggleOffcanvas();
     }
+    // Hide spinning loader
+    hideLoader();
   });
 }
 

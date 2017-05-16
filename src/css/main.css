@@ -59,6 +59,21 @@ html, body {
   margin-top: 4px;
 }
 
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+}
+
+.loading-spinner {
+
+}
+
 /*
  * Off Canvas - http://getbootstrap.com/examples/offcanvas/
  * --------------------------------------------------

@@ -1,3 +1,11 @@
+function hideLoader() {
+  $('#loading-spinner').hide();
+}
+
+function showLoader() {
+  $('#loading-spinner').show();
+}
+
 var ViewModel = function() {
   var self = this;
 
@@ -17,6 +25,7 @@ var ViewModel = function() {
   // Behaviors
   // Perform yelp search, using search `categories` and `location`
   self.yelpSearch = function(categories, location) {
+    showLoader();
     // Internal URL to return results from search
     var url = "http://localhost:5000/";
     $.getJSON( url, {
@@ -52,6 +61,7 @@ var ViewModel = function() {
       });
       self.displayAllMarkers();
       fitLocationMarkers(self.locations());
+      hideLoader();
     });
   };
   // Change what search results are shown

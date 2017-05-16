@@ -47,6 +47,16 @@ module.exports = function(grunt) {
             dest: 'dist/'
           }
         ]
+      },
+      fonts: {
+        files: [
+          {
+            expand: true,
+            flatten: true,
+            src: 'src/fonts/*',
+            dest: 'dist/fonts/'
+          }
+        ]
       }
     },
     htmlmin: {
