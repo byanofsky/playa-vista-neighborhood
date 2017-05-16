@@ -31,7 +31,7 @@ var ViewModel = function() {
     $.getJSON( url, {
       categories: categories,
       location: location,
-      limit: 5,
+      limit: 50,
       radius: '4000', // 4000 meters ~= 3 miles
       sort_by: 'rating' // Show highest rated
     }, function( data ) {
