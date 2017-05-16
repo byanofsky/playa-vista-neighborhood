@@ -1,14 +1,6 @@
 // Set Playa Vista center
 var playaVistaCenter = {lat: 33.9739136, lng: -118.4161883};
 
-function hideLoader() {
-  $('#loading-spinner').hide();
-}
-
-function showLoader() {
-  $('#loading-spinner').show();
-}
-
 var ViewModel = function() {
   var self = this;
 
@@ -30,13 +22,21 @@ var ViewModel = function() {
     { value: 4828, label: '3 Miles'}
   ]);
   self.activeRadiusFilter = ko.observable(self.radiusFilters()[0]);
+  // Boolean if map/location data is loading
+  self.mapLoading = ko.observable(true);
+  self.dataLoading = ko.observable(true);
+  // Show loading symbol when data AND map still loading
+  self.showLoading = ko.computed(function() {
+    return self.mapLoading() || self.dataLoading();
+  });
 
   // Behaviors
   // Perform yelp search, using search `categories` and `location`
   self.yelpSearch = function() {
-    showLoader();
     // Internal URL to return results from search
     var url = "http://localhost:5000/";
+    // Data is loading
+    self.dataLoading(true);
     $.getJSON( url, {
       categories: self.activeSearch().value,
       latitude: playaVistaCenter.lat,
@@ -77,7 +77,12 @@ var ViewModel = function() {
       });
       self.displayAllMarkers();
       fitLocationMarkers(self.locations());
-      hideLoader();
+      // Turn off data loading
+      self.dataLoading(false);
+    }).fail(function() {
+      console.log('failed');
+      // If there was an issue with data load, turn data laoding off
+      if (self.dataLoading()) self.dataLoading(false);
     });
   };
   // Change what search results are shown

@@ -237,8 +237,8 @@ function initMap() {
       // Adjust bounds to account for offcanvas list
       fitLocationMarkers(viewModelInstance.locations());
     }
-    // Hide spinning loader
-    hideLoader();
+    // Map is done loading
+    viewModelInstance.mapLoading(false);
   });
 }
 
