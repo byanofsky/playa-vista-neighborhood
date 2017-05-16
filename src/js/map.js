@@ -237,6 +237,8 @@ function initMap() {
     // Show offcanvas menu by default when window >= 768
     if ($(window).width() >= 768) {
       toggleOffcanvas();
+      // Adjust bounds to account for offcanvas list
+      fitLocationMarkers(viewModelInstance.locations());
     }
     // Hide spinning loader
     hideLoader();
