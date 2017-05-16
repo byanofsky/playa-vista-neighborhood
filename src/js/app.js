@@ -79,10 +79,11 @@ var ViewModel = function() {
       fitLocationMarkers(self.locations());
       // Turn off data loading
       self.dataLoading(false);
-    }).fail(function() {
-      console.log('failed');
+    }).fail(function(data) {
+      console.log('Something went wrong on server: ' + data.responseText);
       // If there was an issue with data load, turn data laoding off
       if (self.dataLoading()) self.dataLoading(false);
+      window.alert('There was an issue loading data');
     });
   };
   // Change what search results are shown

@@ -26,9 +26,11 @@ def yelp_search():
         sort_by=sort_by
     )
     print(search_results)
-    if (search_results.get('error') and
-            search_results['error']['code'] == 'TOKEN_INVALID'):
-        return (jsonify(search_results), 401)
+    if search_results.get('error'):
+        if search_results['error']['code'] == 'TOKEN_INVALID':
+            return (jsonify(search_results), 401, {'Access-Control-Allow-Origin': 'http://localhost:8000'})
+        else:
+            return (jsonify(search_results), 500, {'Access-Control-Allow-Origin': 'http://localhost:8000'})
     else:
         return (jsonify(search_results),
                 200,
