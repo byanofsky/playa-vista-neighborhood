@@ -11,7 +11,7 @@ function showLoader() {
 
 var ViewModel = function() {
   var self = this;
-  var search_radius = 2500; // How far to search in yelp. 4000 meters ~= 3 miles.
+  var search_radius = 3000; // How far to search in yelp. 4000 meters ~= 3 miles.
 
   self.locations = ko.observableArray();
   self.activeLocation = ko.observable();
