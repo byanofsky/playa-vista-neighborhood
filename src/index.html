@@ -89,7 +89,7 @@
                 Distance: <span data-bind="text: activeRadiusFilter().label"></span> <span class="caret"></span>
               </button>
               <ul id="radius-filter" class="dropdown-menu" data-bind="foreach: radiusFilters">
-                <li data-bind="css: { active: $root.activeRadiusFilter().value === $data.value }">
+                <li data-bind="css: { active: $root.activeRadiusFilter() === $data }">
                   <a href="#"
                      data-bind="value: value,
                                 text: label,

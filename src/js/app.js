@@ -11,7 +11,6 @@ function showLoader() {
 
 var ViewModel = function() {
   var self = this;
-  var search_radius = 3000; // How far to search in yelp. 4000 meters ~= 3 miles.
 
   self.locations = ko.observableArray();
   self.activeLocation = ko.observable();
@@ -34,17 +33,16 @@ var ViewModel = function() {
 
   // Behaviors
   // Perform yelp search, using search `categories` and `location`
-  self.yelpSearch = function(categories, location) {
+  self.yelpSearch = function() {
     showLoader();
     // Internal URL to return results from search
     var url = "http://localhost:5000/";
     $.getJSON( url, {
-      categories: categories,
-      // location: location,
+      categories: self.activeSearch().value,
       latitude: playaVistaCenter.lat,
       longitude: playaVistaCenter.lng,
       limit: 50,
-      radius: search_radius,
+      radius: self.activeRadiusFilter().value,
       sort_by: 'rating' // Show highest rated
     }, function( data ) {
       console.log(data);
@@ -52,7 +50,7 @@ var ViewModel = function() {
       data.businesses.forEach(function(business) {
         // Check if business is within distance, otherwise return to skip.
         // Reasoning: https://github.com/Yelp/yelp-api/issues/95
-        if (business.distance > search_radius) {
+        if (business.distance > self.activeRadiusFilter().value) {
           return;
         }
         var location = {
@@ -84,29 +82,28 @@ var ViewModel = function() {
   };
   // Change what search results are shown
   self.newSearch = function(category) {
-    // Only run is this is a new search (not same as active search)
-    if (self.activeSearch().value !== category.value) {
-      // Set active search to category
-      self.activeSearch(category);
-      // Reset markers, locations, and map to default
-      self.removeAllMarkers();
-      self.locations.removeAll();
-      map.setCenter(playaVistaCenter);
-      // Perform yelp search
-      self.yelpSearch(category.value, 'playa vista');
-    }
+    // Reset markers, locations, and map to default
+    self.removeAllMarkers();
+    self.locations.removeAll();
+    map.setCenter(playaVistaCenter);
+    // Perform yelp search
+    self.yelpSearch();
   };
   // Display all locations
   self.filterAll = function() {
-    self.newSearch(self.defaultType);
+    // Set active search to category
+    self.activeSearch(self.defaultType);
+    self.newSearch();
   };
   // Action for when a filter is selected
   self.filter = function(data) {
+    self.activeSearch(data);
     // Category is the value of the element
-    self.newSearch(data);
+    self.newSearch();
   };
   self.filterByRadius = function(data) {
     self.activeRadiusFilter(data);
+    self.newSearch();
   };
   // Get and show categories
   self.showCategories = function() {
