@@ -7,7 +7,8 @@ app.secret_key = FLASK_SECRET_KEY
 @app.route('/')
 def yelp_search():
     categories = request.args.get('categories')
-    location = request.args.get('location')
+    latitude = request.args.get('latitude')
+    longitude = request.args.get('longitude')
     search_limit = request.args.get('limit')
     radius = request.args.get('radius')
     sort_by = request.args.get('sort_by')
@@ -17,7 +18,8 @@ def yelp_search():
     search_results = yelpapi.search(
         bearer_token=bearer_token,
         categories=categories,
-        location=location,
+        latitude=latitude,
+        longitude=longitude,
         search_limit=search_limit,
         radius=radius,
         offset=None,

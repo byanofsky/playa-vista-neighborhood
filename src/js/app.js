@@ -1,3 +1,6 @@
+// Set Playa Vista center
+var playaVistaCenter = {lat: 33.9739136, lng: -118.4161883};
+
 function hideLoader() {
   $('#loading-spinner').hide();
 }
@@ -8,6 +11,7 @@ function showLoader() {
 
 var ViewModel = function() {
   var self = this;
+  var search_radius = 2500; // How far to search in yelp. 4000 meters ~= 3 miles.
 
   self.locations = ko.observableArray();
   self.activeLocation = ko.observable();
@@ -30,14 +34,21 @@ var ViewModel = function() {
     var url = "http://localhost:5000/";
     $.getJSON( url, {
       categories: categories,
-      location: location,
+      // location: location,
+      latitude: playaVistaCenter.lat,
+      longitude: playaVistaCenter.lng,
       limit: 50,
-      radius: '4000', // 4000 meters ~= 3 miles
+      radius: search_radius,
       sort_by: 'rating' // Show highest rated
     }, function( data ) {
       console.log(data);
       // Map needed data to an object
       data.businesses.forEach(function(business) {
+        // Check if business is within distance, otherwise return to skip.
+        // Reasoning: https://github.com/Yelp/yelp-api/issues/95
+        if (business.distance > search_radius) {
+          return;
+        }
         var location = {
           id: business.id,
           name: business.name,

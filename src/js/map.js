@@ -10,9 +10,6 @@ var placesService;
 // Google maps info window
 var infowindow;
 
-// Set Playa Vista center
-var playaVistaCenter = {lat: 33.9739136, lng: -118.4161883};
-
 function initMap() {
   // Create a map object
   map = new google.maps.Map(document.getElementById('map'), {

@@ -92,7 +92,7 @@ def request(host, path, bearer_token, url_params=None):
     return response.json()
 
 
-def search(bearer_token, categories, location, search_limit, radius, offset=None, sort_by='best_match'):
+def search(bearer_token, categories, latitude, longitude, search_limit, radius, offset=None, sort_by='best_match'):
     """Query the Search API by a search term and location.
     Args:
         term (str): The search term passed to the API.
@@ -102,7 +102,8 @@ def search(bearer_token, categories, location, search_limit, radius, offset=None
     """
     url_params = {
         'term': categories,
-        'location': location.replace(' ', '+'),
+        'latitude': latitude,
+        'longitude': longitude,
         'limit': search_limit,
         'radius': radius,
         'offset': offset,
