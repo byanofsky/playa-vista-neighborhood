@@ -32,7 +32,8 @@ var ViewModel = function() {
       categories: categories,
       location: location,
       limit: 5,
-      radius: '4000' // 4000 meters ~= 3 miles
+      radius: '4000', // 4000 meters ~= 3 miles
+      sort_by: 'rating' // Show highest rated
     }, function( data ) {
       console.log(data);
       // Map needed data to an object
