@@ -47,14 +47,16 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#">Playa Vista</a>
-          <p class="navbar-text">Now Showing: <span data-bind="text: activeSearch().label"></span></p>
+          <p class="navbar-text visible-xs-block">
+            <span data-bind="text: activeSearch().label"></span> within <span data-bind="text: activeRadiusFilter().label"></span>
+          </p>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="main-nav">
           <ul class="nav navbar-nav">
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Select Restaurant Type <span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-bind="text: activeSearch().label"></span> <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li data-bind="css: { active: activeSearch().value === defaultType.value }">
                   <a href="#" data-bind="click: filterAll">
@@ -70,7 +72,17 @@
                   </li>
                 <!-- /ko -->
               </ul>
-            </li>
+            </li><!--/.dropdown-->
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Distance: <span data-bind="text: activeRadiusFilter().label"></span> <span class="caret"></span></a>
+              <ul class="dropdown-menu" data-bind="foreach: radiusFilters">
+                <li data-bind="css: { active: $root.activeRadiusFilter() === $data }">
+                  <a href="#" data-bind="value: value,
+                                         text: label,
+                                         click: $root.filterByRadius"></a>
+                </li>
+              </ul>
+            </li><!--/.dropdown-->
           </ul>
           <form class="navbar-form navbar-right">
             <div class="form-group">
@@ -85,25 +97,6 @@
       <div class="row row-offcanvas row-offcanvas-left">
         <div id="list-container" class="col col-no-gutter col-xs-3 sidebar-offcanvas">
           <div id="list">
-            <!-- Filter -->
-            <div class="btn-group">
-              <button type="button"
-                      class="btn btn-default dropdown-toggle"
-                      data-toggle="dropdown"
-                      aria-haspopup="true"
-                      aria-expanded="false">
-                Distance: <span data-bind="text: activeRadiusFilter().label"></span> <span class="caret"></span>
-              </button>
-              <ul id="radius-filter" class="dropdown-menu" data-bind="foreach: radiusFilters">
-                <li data-bind="css: { active: $root.activeRadiusFilter() === $data }">
-                  <a href="#"
-                     data-bind="value: value,
-                                text: label,
-                                click: $root.filterByRadius">
-                  </a>
-                </li>
-              </ul>
-            </div><!--/.btn-group-->
             <div class="list-group" data-bind="foreach: locations">
               <button type="button"
                       class="list-group-item"
