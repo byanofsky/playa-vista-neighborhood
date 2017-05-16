@@ -8,7 +8,7 @@ $(document).ready(function () {
 
 function toggleOffcanvas() {
   $('.row-offcanvas').toggleClass('active');
-  $('#map-container').toggleClass('col-xs-9');
+  $('#map-container').toggleClass('col-xs-6 col-sm-9');
   // Trigger resize for map since #map-container changes size
   google.maps.event.trigger(map, 'resize');
 }

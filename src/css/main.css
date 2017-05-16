@@ -89,22 +89,37 @@ html, body {
   left: 0;
 }
 
-.row-offcanvas-left
-.sidebar-offcanvas {
-  left: -25%; /* 3 columns */
-}
-
 .row-offcanvas-left.active
 .sidebar-offcanvas {
-  left: 0; /* 3 columns */
+  left: 0;
+}
+
+.row-offcanvas-left
+.sidebar-offcanvas {
+  left: -50%;
 }
 
 .row-offcanvas-left.active #map-container {
-  left: 25%; /* 3 columns */
+  left: 50%;
 }
 
 .sidebar-offcanvas {
   position: absolute;
   top: 0;
-  width: 25%; /* 3 columns */
+  width: 50%;
+}
+
+@media (min-width: 768px) {
+  .row-offcanvas-left
+  .sidebar-offcanvas {
+    left: -25%;
+  }
+
+  .row-offcanvas-left.active #map-container {
+    left: 25%;
+  }
+
+  .sidebar-offcanvas {
+    width: 25%;
+  }
 }
