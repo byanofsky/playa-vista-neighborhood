@@ -86,14 +86,14 @@
                       data-toggle="dropdown"
                       aria-haspopup="true"
                       aria-expanded="false">
-                Filter <span class="caret"></span>
+                Distance: <span data-bind="text: activeRadiusFilter().label"></span> <span class="caret"></span>
               </button>
-              <ul id="filters" class="dropdown-menu" data-bind="foreach: types">
-                <li>
+              <ul id="radius-filter" class="dropdown-menu" data-bind="foreach: radiusFilters">
+                <li data-bind="css: { active: $root.activeRadiusFilter().value === $data.value }">
                   <a href="#"
                      data-bind="value: value,
                                 text: label,
-                                click: $root.filter">
+                                click: $root.filterByRadius">
                   </a>
                 </li>
               </ul>

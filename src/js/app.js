@@ -25,6 +25,12 @@ var ViewModel = function() {
   );
   // Track which items are being shown
   self.activeSearch = ko.observable(self.defaultType);
+  self.radiusFilters = ko.observableArray([
+    { value: 1609, label: '1 Mile'},
+    { value: 3218, label: '2 Miles'},
+    { value: 4828, label: '3 Miles'}
+  ]);
+  self.activeRadiusFilter = ko.observable(self.radiusFilters()[0]);
 
   // Behaviors
   // Perform yelp search, using search `categories` and `location`
@@ -98,6 +104,9 @@ var ViewModel = function() {
   self.filter = function(data) {
     // Category is the value of the element
     self.newSearch(data);
+  };
+  self.filterByRadius = function(data) {
+    self.activeRadiusFilter(data);
   };
   // Get and show categories
   self.showCategories = function() {
