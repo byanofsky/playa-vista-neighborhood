@@ -70,8 +70,15 @@ html, body {
   z-index: 50;
 }
 
-.loading-spinner {
+.loading-spinner .spinner {
+  animation-duration: 3s;
+  animation-name: spin;
+  animation-iteration-count: infinite;
+}
 
+@keyframes spin {
+  from {transform:rotate(0deg);}
+  to {transform:rotate(360deg);}
 }
 
 /*
