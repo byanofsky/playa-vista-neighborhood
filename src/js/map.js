@@ -283,22 +283,14 @@ function openInfoWindow(marker, business) {
 function populateInfoWindow(business) {
   console.log(business);
   var content = '';
-  content += '<div>' + business.name + '</div>';
-  content += '<div>Rating: ' + business.rating || 'N/A' + '</div>';
-  // Check if there are categories
-  if (business.categories) {
-    content += '<div>Categories: ';
-    // Loop through categories and add their title
-    content += business.categories.map(function(category) {
-      return category.title;
-    }).join(', ');
-    content += '</div>';
-  }
+  content += '<h5>' + business.name + '</h5>';
   if (business.location.display_address) {
-    content += '<div><div>Address:</div>';
-    content += business.location.display_address.join('<br>');
-    content += '</div>';
+    content += '<p>';
+    content += business.location.display_address.join(', ');
+    content += '</p>';
   }
+  content += '<img src="img/' + business.star_img + '">';
+  content += '<p>Based On ' + business.review_count + ' ' + (business.review_count === 1 ? 'Review' : 'Reviews') + '</p>';
   infowindow.setContent(content);
 }
 
