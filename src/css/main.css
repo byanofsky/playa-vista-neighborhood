@@ -1,5 +1,6 @@
 html, body {
   height: 100%;
+  overflow: hidden;
 }
 
 .container-fluid {
@@ -17,11 +18,15 @@ html, body {
 }
 
 .navbar {
+  box-shadow: #999 0 0px 15px 0px;
   margin-bottom: 0;
+  z-index: 10; /* Keep navbar above all content */
 }
 
 #main-content {
   height: calc(100% - 52px);
+  position: absolute;
+  bottom: 0;
 }
 
 #main-content .row,
