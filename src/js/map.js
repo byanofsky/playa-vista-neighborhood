@@ -16,6 +16,8 @@ function initMap() {
     center: playaVistaCenter,
     scrollwheel: true,
     zoom: 15,
+    clickableIcons: false,
+    streetViewControl: false,
     mapTypeControlOptions: {
       mapTypeIds: ['styled_map', 'roadmap']
     }
