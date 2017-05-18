@@ -144,7 +144,7 @@ var ViewModel = function() {
   };
   // Get yelp star image according to rating
   self.getYelpStarIMG = function(rating) {
-    return 'small_' + String(rating).replace('.5', '_half') + '.png';
+    return 'small_' + String(rating).replace('.5', '_half');
   };
 
   // Load initial data

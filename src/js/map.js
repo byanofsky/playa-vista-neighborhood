@@ -289,7 +289,13 @@ function populateInfoWindow(business) {
     content += business.location.display_address.join(', ');
     content += '</p>';
   }
-  content += '<img src="img/' + business.star_img + '">';
+  var imgFile = (function() {
+    var file = 'img/' + business.star_img;
+    return function(px) {
+      return file + (px || '') + '.png';
+    };
+  })();
+  content += '<img src="' + imgFile() + '"  srcset="' + imgFile('@2x') + ' 2x, ' + imgFile('@3x') + ' 3x">';
   content += '<p>Based On ' + business.review_count + ' ' + (business.review_count === 1 ? 'Review' : 'Reviews') + '</p>';
   infowindow.setContent(content);
 }
