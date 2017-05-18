@@ -23,65 +23,74 @@
     <![endif]-->
   </head>
   <body>
+    <!-- Loading spinner -->
     <div class="loading-view" data-bind="visible: showLoading">
       <span class="loading-spinner glyphicon glyphicon-repeat" aria-hidden="true"></span>
       <span class="sr-only">Loading...</span>
     </div> <!--/.loading-spinner-->
-    
+
+    <!-- Navbar -->
     <nav class="navbar navbar-default">
       <div class="container-fluid">
-        <button type="button" class="navbar-left offcanvas-toggle" data-toggle="offcanvas">
-          <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span> <span>List</span>
-        </button>
-
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav" aria-expanded="false">
-            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> <span>Options</span>
-          </button>
-          <a class="navbar-brand" href="#">Playa Vista</a>
-        </div>
+          <!-- Offcanvas toggle button -->
+          <button type="button" class="navbar-left offcanvas-toggle" data-toggle="offcanvas">
+            <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span> <span>List</span>
+            <span class="sr-only">Toggle List</span>
+          </button><!--/.offcanvas-toggle-->
 
+          <!-- Options menu toggle button -->
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#options" aria-expanded="false">
+            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> <span>Options</span>
+            <span class="sr-only">Toggle Options</span>
+          </button><!--/.navbar-toggle-->
+
+          <!-- Navbar branding -->
+          <a class="navbar-brand" href="#">Playa Vista</a>
+        </div><!--/.navbar-header-->
+
+        <!-- Options display only on mobile -->
         <p class="navbar-text visible-xs-block">
           <span data-bind="text: activeSearch().label"></span> within <span data-bind="text: activeRadiusFilter().label"></span>
-        </p>
+        </p><!--/.navbar-text-->
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="main-nav">
+        <!-- Options menu -->
+        <div id="options" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
+            <!-- Restaurant category selector -->
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-bind="text: activeSearch().label"></span> <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li data-bind="css: { active: activeSearch().value === defaultType.value }">
-                  <a href="#" data-bind="click: filterAll">
-                    All Restaurants
-                  </a>
-                </li>
-                <li role="separator" class="divider"></li>
-                <!-- ko foreach: types -->
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <span data-bind="text: activeSearch().label"></span> <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" data-bind="foreach: types">
                   <li data-bind="css: { active: $root.activeSearch().value === value }">
                     <a href="#" data-bind="text: label,
                                            value: value,
                                            click: $root.filter"></a>
                   </li>
-                <!-- /ko -->
-              </ul>
+              </ul><!--/.dropdown-menu-->
             </li><!--/.dropdown-->
+            <!-- Disntance selector -->
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Distance: <span data-bind="text: activeRadiusFilter().label"></span> <span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                Distance: <span data-bind="text: activeRadiusFilter().label"></span> <span class="caret"></span>
+              </a>
               <ul class="dropdown-menu" data-bind="foreach: radiusFilters">
                 <li data-bind="css: { active: $root.activeRadiusFilter() === $data }">
                   <a href="#" data-bind="value: value,
                                          text: label,
                                          click: $root.filterByRadius"></a>
                 </li>
-              </ul>
+              </ul><!--/.dropdown-menu-->
             </li><!--/.dropdown-->
-          </ul>
-        </div><!-- /.navbar-collapse -->
+          </ul><!--/.navbar-nav-->
+        </div><!-- /#options -->
       </div><!-- /.container-fluid -->
-    </nav>
-    <div id="main-content" class="container-fluid">
+    </nav> <!--/.navbar-->
+
+    <!-- Main content area -->
+    <main id="main-content" class="container-fluid">
       <div class="row row-offcanvas row-offcanvas-left">
         <div id="list-container" class="col col-no-gutter col-xs-6 col-sm-3 sidebar-offcanvas">
           <div id="list">
@@ -98,7 +107,7 @@
           <div id="map"></div>
         </div>
       </div><!--/.row-offcanvas-->
-    </div><!--/.container-fluid-->
+    </main><!--/#main-content-->
     <!-- jQuery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Knockout.js -->

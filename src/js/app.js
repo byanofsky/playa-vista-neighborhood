@@ -6,16 +6,17 @@ var ViewModel = function() {
 
   self.locations = ko.observableArray();
   self.activeLocation = ko.observable();
-  self.defaultType = { value: 'restaurants', label: 'All Restaurants' };
   self.types = ko.observableArray(
     [
+      { value: 'restaurants', label: 'All Restaurants' },
       { value: 'italian', label: 'Italian' },
       { value: 'japanese', label: 'Japanese' },
       { value: 'pizza', label: 'Pizza' }
     ]
   );
+  self.defaultType = ko.observable(self.types()[0]);
   // Track which items are being shown
-  self.activeSearch = ko.observable(self.defaultType);
+  self.activeSearch = ko.observable(self.defaultType());
   self.radiusFilters = ko.observableArray([
     { value: 1609, label: '1 Mile'},
     { value: 3218, label: '2 Miles'},
