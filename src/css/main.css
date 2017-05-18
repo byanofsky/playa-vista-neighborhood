@@ -64,7 +64,7 @@ html, body {
   margin-top: 4px;
 }
 
-.loading-spinner {
+.loading-view {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,7 +75,7 @@ html, body {
   z-index: 50;
 }
 
-.loading-spinner .spinner {
+.loading-view .loading-spinner {
   animation-duration: 3s;
   animation-name: spin;
   animation-iteration-count: infinite;

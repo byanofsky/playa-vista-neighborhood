@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Playa Vista App</title>
+    <title>Playa Vista Restaurants</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet"
@@ -23,10 +23,11 @@
     <![endif]-->
   </head>
   <body>
-    <div id="loading-spinner" class="loading-spinner" data-bind="visible: showLoading">
-      <span class="spinner glyphicon glyphicon-repeat" aria-hidden="true"></span>
+    <div class="loading-view" data-bind="visible: showLoading">
+      <span class="loading-spinner glyphicon glyphicon-repeat" aria-hidden="true"></span>
       <span class="sr-only">Loading...</span>
-    </div>
+    </div> <!--/.loading-spinner-->
+    
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <button type="button" class="navbar-left offcanvas-toggle" data-toggle="offcanvas">
