@@ -12,31 +12,31 @@ html, body {
   width: 100%;
 }
 
-#list {
-  height: 100%;
-  overflow: auto;
-}
-
 .navbar {
   box-shadow: #999 0 0px 15px 0px;
   margin-bottom: 0;
   z-index: 10; /* Keep navbar above all content */
 }
 
-#main-content {
+.content-area {
   height: calc(100% - 52px);
   position: absolute;
   bottom: 0;
 }
 
-#main-content .row,
-#main-content .col {
+.content-area .row,
+.content-area .col {
   height: 100%;
 }
 
-#main-content .col-no-gutter {
+.content-area .col-no-gutter {
   padding-left: 0;
   padding-right: 0;
+}
+
+.row-offcanvas .col {
+  height: 100%;
+  overflow: auto;
 }
 
 .offcanvas-toggle {
@@ -98,21 +98,19 @@ html, body {
           transition: all .25s ease-out;
 }
 
-.row-offcanvas-left {
+.row-offcanvas {
   left: 0;
 }
 
-.row-offcanvas-left.active
-.sidebar-offcanvas {
+.row-offcanvas.active .sidebar-offcanvas {
   left: 0;
 }
 
-.row-offcanvas-left
-.sidebar-offcanvas {
+.row-offcanvas .sidebar-offcanvas {
   left: -50%;
 }
 
-.row-offcanvas-left.active #map-container {
+.row-offcanvas.active .main-offcanvas {
   left: 50%;
 }
 
@@ -123,12 +121,11 @@ html, body {
 }
 
 @media (min-width: 768px) {
-  .row-offcanvas-left
-  .sidebar-offcanvas {
+  .row-offcanvas .sidebar-offcanvas {
     left: -25%;
   }
 
-  .row-offcanvas-left.active #map-container {
+  .row-offcanvas.active .main-offcanvas {
     left: 25%;
   }
 

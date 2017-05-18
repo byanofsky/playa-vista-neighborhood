@@ -90,38 +90,40 @@
     </nav> <!--/.navbar-->
 
     <!-- Main content area -->
-    <main id="main-content" class="container-fluid">
-      <div class="row row-offcanvas row-offcanvas-left">
-        <div id="list-container" class="col col-no-gutter col-xs-6 col-sm-3 sidebar-offcanvas">
-          <div id="list">
-            <div class="list-group" data-bind="foreach: locations">
-              <button type="button"
-                      class="list-group-item"
-                      data-bind="text: name,
-                                 click: $root.selectListItem,
-                                 css: { active: $root.activeLocation() === $data }"></button>
-            </div><!--/.list-group-->
-          </div><!--/#list-->
-        </div><!--/.sidebar-offcanvas-->
-        <div id="map-container" class="col col-no-gutter">
+    <main id="main-content" class="content-area container-fluid">
+      <div class="row row-offcanvas">
+        <!-- Restaurant list -->
+        <div class="list sidebar-offcanvas col col-no-gutter col-xs-6 col-sm-3">
+          <div class="list-group" data-bind="foreach: locations">
+            <button type="button"
+                    class="list-group-item"
+                    data-bind="text: name,
+                               click: $root.selectListItem,
+                               css: { active: $root.activeLocation() === $data }"></button>
+          </div><!--/.list-group-->
+        </div><!--/.list-->
+
+        <!-- Map -->
+        <div id="map-container" class="main-offcanvas col col-no-gutter">
           <div id="map"></div>
         </div>
       </div><!--/.row-offcanvas-->
     </main><!--/#main-content-->
+
     <!-- jQuery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Knockout.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
-    <!-- Main app code -->
-    <script src="js/app.min.js"></script>
-    <!-- Code to run google map -->
-    <script src="js/map.min.js"></script>
     <!-- Bootstrap JS -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
+    <!-- Main app code -->
+    <script src="js/app.min.js"></script>
     <!-- Control offcanvas functionality -->
     <script src="js/offcanvas.min.js"></script>
+    <!-- Code to run google map -->
+    <script src="js/map.min.js"></script>
     <!-- Google Maps JS API -->
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyA_aeD5aodxJl71Qy7o6ZFXYVtQgMFVMC8&callback=initMap"
             async defer></script>
