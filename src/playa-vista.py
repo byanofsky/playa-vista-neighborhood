@@ -28,33 +28,32 @@ def get_search_results(url_params):
     """
     categories = url_params['categories']
     radius = url_params['radius']
-    # Check if results already in memory
-    categories_exists = bool(YELP_API_RESULTS.get(categories))
-    print 'Category exists %s' % categories_exists
-    radius_exists = categories_exists\
-        and bool(YELP_API_RESULTS[categories].get(radius))
-    print 'Radius exists %s' % radius_exists
-    search_results_exists = radius_exists\
-        and bool(YELP_API_RESULTS[categories][radius].get('search_results'))
-    print 'Search Results exists %s' % search_results_exists
-    cache_valid = radius_exists\
-        and YELP_API_RESULTS[categories][radius]['cache'] > time.time()
-    print 'Cache valid %s' % cache_valid
-    if radius_exists:
-        print 'Time to Cache Expire: %s' % (
-            YELP_API_RESULTS[categories][radius]['cache'] - time.time()
-        )
-    search_results_valid = search_results_exists and cache_valid
-    if not search_results_valid:
-        if not categories_exists:
-            YELP_API_RESULTS[categories] = {}
-        if not radius_exists:
-            YELP_API_RESULTS[categories][radius] = {}
-        if not cache_valid or not search_results_exists:
-            search_results = yelpapi.search(url_params)
-            YELP_API_RESULTS[categories][radius]['search_results'] = search_results
-            YELP_API_RESULTS[categories][radius]['cache'] = time.time()+60
-    return YELP_API_RESULTS[categories][radius]['search_results']
+    key = categories + '|' + radius
+
+    # Check if data already in memory
+    print 'Checking cached Yelp data.'
+    data = YELP_API_RESULTS.get(key)
+    if not data:
+        print 'New search. Not cached yet.'
+        YELP_API_RESULTS[key] = {}
+    else:
+        # Check that data has search results
+        search_results_exist = data.get('search_results')
+        print 'Search Results Exist: %s' % bool(search_results_exist)
+        # Check that cache hasn't expired
+        cache_valid = data.get('cache') > time.time()
+        print 'Cache_valid: %s' % bool(cache_valid)
+
+    # Boolean to determine if new search performed
+    perform_new_search = not (data and search_results_exist and cache_valid)
+    if perform_new_search:
+        print 'Getting new Yelp data'
+        YELP_API_RESULTS[key]['search_results'] = yelpapi.search(url_params)
+        YELP_API_RESULTS[key]['cache'] = time.time() + 15
+
+    cache_expiration = YELP_API_RESULTS[key]['cache'] - time.time()
+    print 'Time to cache expiration: %s' % (cache_expiration)
+    return YELP_API_RESULTS[key]['search_results']
 
 
 @app.route('/')
