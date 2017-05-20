@@ -24,7 +24,7 @@
   </head>
   <body>
     <!-- Loading spinner -->
-    <div class="loading-view" data-bind="visible: showLoading">
+    <div class="loading-view" data-bind="visible: dataLoading">
       <span class="loading-spinner glyphicon glyphicon-repeat" aria-hidden="true"></span>
       <span class="sr-only">Loading...</span>
     </div> <!--/.loading-spinner-->
@@ -52,7 +52,7 @@
 
         <!-- Options display only on mobile -->
         <p class="navbar-text visible-xs-block">
-          <span data-bind="text: activeSearch().label"></span> within <span data-bind="text: activeRadiusFilter().label"></span>
+          <span data-bind="text: activeCategory().label"></span> within <span data-bind="text: activeRadiusFilter().label"></span>
         </p><!--/.navbar-text-->
 
         <!-- Options menu -->
@@ -61,13 +61,13 @@
             <!-- Restaurant category selector -->
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                <span data-bind="text: activeSearch().label"></span> <span class="caret"></span>
+                <span data-bind="text: activeCategory().label"></span> <span class="caret"></span>
               </a>
-              <ul class="dropdown-menu" data-bind="foreach: types">
-                  <li data-bind="css: { active: $root.activeSearch().value === value }">
+              <ul class="dropdown-menu" data-bind="foreach: categories">
+                  <li data-bind="css: { active: $root.activeCategory().value === value }">
                     <a href="#" data-bind="text: label,
                                            value: value,
-                                           click: $root.filter"></a>
+                                           click: $root.filterByCategory"></a>
                   </li>
               </ul><!--/.dropdown-menu-->
             </li><!--/.dropdown-->
@@ -94,12 +94,12 @@
       <div class="row row-offcanvas">
         <!-- Restaurant list -->
         <div class="list sidebar-offcanvas col col-no-gutter col-xs-6 col-sm-3">
-          <div class="list-group" data-bind="foreach: locations">
+          <div class="list-group" data-bind="foreach: restaurants">
             <button type="button"
                     class="list-group-item"
                     data-bind="text: name,
-                               click: $root.selectListItem,
-                               css: { active: $root.activeLocation() === $data }"></button>
+                               click: $root.selectListRestaurant,
+                               css: { active: $root.activeRestaurant() === $data }"></button>
           </div><!--/.list-group-->
         </div><!--/.list-->
 

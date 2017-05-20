@@ -1,9 +1,6 @@
 // Declare variables to reference outside initMap
 // Google map
 var map;
-// TODO: remove
-// All map markers
-var markers = [];
 // Google API Services
 var geocoder;
 var placesService;
@@ -13,7 +10,7 @@ var infowindow;
 function initMap() {
   // Create a map object
   map = new google.maps.Map(document.getElementById('map'), {
-    center: playaVistaCenter,
+    center: locationCenter,
     scrollwheel: true,
     zoom: 15,
     clickableIcons: false,
@@ -231,8 +228,8 @@ function initMap() {
   // Initialize infowinfow
   infowindow = new google.maps.InfoWindow();
 
-  // Load initial data once map is loaded
-  viewModelInstance.yelpSearch('restaurants', 'playa vista');
+  // Load initial restaurant data once google maps api loaded
+  viewModelInstance.yelpRestaurantSearch();
 
   // Toogle off canvas list once map has loaded
   google.maps.event.addListenerOnce(map, 'idle', function() {
@@ -240,7 +237,7 @@ function initMap() {
     if ($(window).width() >= 768) {
       toggleOffcanvas();
       // Adjust bounds to account for offcanvas list
-      fitLocationMarkers(viewModelInstance.locations());
+      fitLocationMarkers(viewModelInstance.restaurants());
     }
     // Map is done loading
     viewModelInstance.mapLoading(false);
@@ -272,34 +269,33 @@ function fitLocationMarkers(locations) {
 }
 
 // When marker focused on (ie, click from list item), open info window
-function selectMarker(marker, business) {
-  openInfoWindow(marker, business);
+function selectMarker(marker, restaurant) {
+  openInfoWindow(marker, restaurant);
 }
 
 // Open infowindow on marker with defined content
-function openInfoWindow(marker, business) {
-  populateInfoWindow(business);
+function openInfoWindow(marker, restaurant) {
+  populateInfoWindow(restaurant);
   infowindow.open(map, marker);
 }
 
-// Populate info window with business information
-function populateInfoWindow(business) {
-  console.log(business);
+// Populate info window with restaurant information
+function populateInfoWindow(restaurant) {
   var content = '';
-  content += '<h5>' + business.name + '</h5>';
-  if (business.location.display_address) {
+  content += '<h5>' + restaurant.name + '</h5>';
+  if (restaurant.location.display_address) {
     content += '<p>';
-    content += business.location.display_address.join(', ');
+    content += restaurant.location.display_address.join(', ');
     content += '</p>';
   }
   var imgFile = (function() {
-    var file = 'img/' + business.star_img;
+    var file = 'img/' + restaurant.star_img;
     return function(px) {
       return file + (px || '') + '.png';
     };
   })();
   content += '<img src="' + imgFile() + '"  srcset="' + imgFile('@2x') + ' 2x, ' + imgFile('@3x') + ' 3x">';
-  content += '<p>Based On ' + business.review_count + ' ' + (business.review_count === 1 ? 'Review' : 'Reviews') + '</p>';
+  content += '<p>Based On ' + restaurant.review_count + ' ' + (restaurant.review_count === 1 ? 'Review' : 'Reviews') + '</p>';
   infowindow.setContent(content);
 }
 
