@@ -11,7 +11,8 @@ var ViewModel = function() {
       { value: 'restaurants', label: 'All Restaurants' },
       { value: 'italian', label: 'Italian' },
       { value: 'japanese', label: 'Japanese' },
-      { value: 'pizza', label: 'Pizza' }
+      { value: 'pizza', label: 'Pizza' },
+      { value: 'vegetarian', label: 'Vegetarian'}
     ]
   );
   self.defaultType = ko.observable(self.types()[0]);
