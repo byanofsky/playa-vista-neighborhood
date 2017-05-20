@@ -15,6 +15,7 @@ ORIGIN = 'http://localhost:8000'
 # Structure:
 # {'categories': 'distance_1': {..., 'expires': xyz}, 'distance_2': {...}}
 YELP_API_RESULTS = {}
+CACHE_EXPIRATION = 60  # seconds
 
 
 def get_search_results(url_params):
@@ -49,10 +50,10 @@ def get_search_results(url_params):
     if perform_new_search:
         print 'Getting new Yelp data'
         YELP_API_RESULTS[key]['search_results'] = yelpapi.search(url_params)
-        YELP_API_RESULTS[key]['cache'] = time.time() + 15
+        YELP_API_RESULTS[key]['cache'] = time.time() + CACHE_EXPIRATION
 
-    cache_expiration = YELP_API_RESULTS[key]['cache'] - time.time()
-    print 'Time to cache expiration: %s' % (cache_expiration)
+    time_to_expiration = YELP_API_RESULTS[key]['cache'] - time.time()
+    print 'Time to cache expiration: %s' % (time_to_expiration)
     return YELP_API_RESULTS[key]['search_results']
 
 
