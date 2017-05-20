@@ -231,6 +231,9 @@ function initMap() {
   // Initialize infowinfow
   infowindow = new google.maps.InfoWindow();
 
+  // Load initial data once map is loaded
+  viewModelInstance.yelpSearch('restaurants', 'playa vista');
+
   // Toogle off canvas list once map has loaded
   google.maps.event.addListenerOnce(map, 'idle', function() {
     // Show offcanvas menu by default when window >= 768

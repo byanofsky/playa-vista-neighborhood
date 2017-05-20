@@ -147,9 +147,6 @@ var ViewModel = function() {
   self.getYelpStarIMG = function(rating) {
     return 'small_' + String(rating).replace('.5', '_half');
   };
-
-  // Load initial data
-  self.yelpSearch('restaurants', 'playa vista');
 };
 
 var viewModelInstance = new ViewModel();
