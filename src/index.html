@@ -91,7 +91,7 @@
 
     <!-- Main content area -->
     <main id="main-content" class="content-area container-fluid">
-      <div class="row row-offcanvas">
+      <div data-bind="css: { active: offcanvasActive }" class="row row-offcanvas">
         <!-- Restaurant list -->
         <div class="list sidebar-offcanvas col col-no-gutter col-xs-6 col-sm-3">
           <div class="list-group" data-bind="foreach: restaurants">
@@ -104,7 +104,7 @@
         </div><!--/.list-->
 
         <!-- Map -->
-        <div id="map-container" class="main-offcanvas col col-no-gutter">
+        <div data-bind="css: { 'col-xs-6': offcanvasActive, 'col-sm-9': offcanvasActive }" id="map-container" class="main-offcanvas col col-no-gutter">
           <div id="map"></div>
         </div>
       </div><!--/.row-offcanvas-->

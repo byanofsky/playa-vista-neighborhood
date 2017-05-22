@@ -34,6 +34,9 @@ var ViewModel = function() {
   self.dataLoading = ko.computed(function() {
     return self.mapLoading() || self.restaurantsLoading();
   });
+  // Track if offcanvas list should be visible or not.
+  // If window width is greater than 768px, show by default.
+  self.offcanvasActive = ko.observable($(window).width() >= 768);
 
   // Behaviors
   // Perform yelp search, using `activeCategory` and `activeRadiusFilter`
@@ -154,9 +157,7 @@ var ViewModel = function() {
   };
   // Toggle offcanvas restaurant list
   self.toggleOffcanvas = function() {
-    // Offcanvas menu from http://getbootstrap.com/examples/offcanvas/
-    $('.row-offcanvas').toggleClass('active');
-    $('#map-container').toggleClass('col-xs-6 col-sm-9');
+    self.offcanvasActive(! self.offcanvasActive());
     // Check if Google maps API has loaded
     if (typeof google !== "undefined" && typeof google.maps !== "undefined") {
       // Trigger resize for map since #map-container changes size
@@ -170,10 +171,6 @@ var viewModelInstance = new ViewModel();
 ko.applyBindings(viewModelInstance);
 
 $(document).ready(function () {
-  // Show offcanvas menu by default when window >= 768
-  if ($(window).width() >= 768) {
-    viewModelInstance.toggleOffcanvas();
-  }
   // Set the main content height to match screen size
   setMainContentHeight();
   // Adjust main content height when window resizes
