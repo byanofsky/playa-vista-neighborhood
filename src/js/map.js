@@ -244,17 +244,17 @@ function initMap() {
   });
 }
 
-// Creates a default marker for map
-function createMarker(position, location) {
+// Creates a marker for map
+function createMarker(restaurant) {
   var marker = new google.maps.Marker({
-    position: position,
-    title: location.name,
+    position: restaurant.position,
+    title: restaurant.name,
     animation: google.maps.Animation.DROP,
-    location: location
+    restaurant: restaurant
   });
   // Add listener to fire actions when marker selected
   marker.addListener('click', function() {
-    selectMarker(marker, location);
+    selectMarker(marker, restaurant);
   });
   return marker;
 }

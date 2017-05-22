@@ -61,7 +61,7 @@ var ViewModel = function() {
         // Turn yelp data into an internal restaurant object
         var restaurant = self.mapYelp2Local(business);
         // Create a marker, and assign to restaurant
-        restaurant.marker = createMarker(restaurant.position, restaurant);
+        restaurant.marker = createMarker(restaurant);
         // Add new restaurant to `restaurants` observable array
         self.restaurants.push(restaurant);
       });
