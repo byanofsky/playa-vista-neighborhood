@@ -36,7 +36,7 @@ var ViewModel = function() {
   });
 
   // Behaviors
-  // Perform yelp search, using search `categories` and `location`
+  // Perform yelp search, using `activeCategory` and `activeRadiusFilter`
   self.yelpRestaurantSearch = function() {
     // Set restaurants data loading observable to `true`
     self.restaurantsLoading(true);
@@ -48,10 +48,8 @@ var ViewModel = function() {
       radius: self.activeRadiusFilter().value,
       sort_by: 'rating' // Show highest rated first
     }, function( data ) {
-      // Reset markers, locations, and map to default
-      self.removeAllMarkers();
-      self.restaurants.removeAll();
-      map.setCenter(locationCenter);
+      // Remove current map and restaurant data
+      self.clearData();
       // Map needed data to an object
       // TODO: might be able to use `map` here instead
       data.businesses.forEach(function(business) {
@@ -60,33 +58,21 @@ var ViewModel = function() {
         if (business.distance > self.activeRadiusFilter().value) {
           return;
         }
-        var restaurant = {
-          id: business.id,
-          name: business.name,
-          url: business.url,
-          // Store position in lat/lng format usable by google maps
-          position: {
-            lat: business.coordinates.latitude,
-            lng: business.coordinates.longitude
-          },
-          location: business.location,
-          price: business.price,
-          categories: business.categories,
-          rating: business.rating,
-          star_img: self.getYelpStarIMG(business.rating),
-          review_count: business.review_count,
-          phone: business.phone
-        };
+        // Turn yelp data into an internal restaurant object
+        var restaurant = self.mapYelp2Local(business);
         // Create a marker, and assign to restaurant
         restaurant.marker = createMarker(restaurant.position, restaurant);
         // Add new restaurant to `restaurants` observable array
         self.restaurants.push(restaurant);
       });
+      // Display all markers on map
       self.displayAllMarkers();
+      // Adjust map bounds to fit all markers
       fitLocationMarkers(self.restaurants());
       // Turn off restaurant data loading observable
       self.restaurantsLoading(false);
     }).fail(function(data) {
+      // TODO: what happens on fail. revert back
       console.log('Something went wrong on server: ' + data.responseText);
       // If there was an issue with data load, turn data laoding off
       if (self.dataLoading()) self.dataLoading(false);
@@ -98,20 +84,23 @@ var ViewModel = function() {
     // Perform yelp search
     self.yelpRestaurantSearch();
   };
-  // Display all locations
+  // Display all locations. Set active category to default
+  // and perform new search
   self.showAllCategories = function() {
-    // Set active search to category
+    // Set active search to default category
     self.activeCategory(self.defaultCategory);
     self.search();
   };
-  // Action for when a filter is selected
+  // Filter by category. Set active category to category parameter, and perform
+  // new search
   self.filterByCategory = function(category) {
     self.activeCategory(category);
-    // Category is the value of the element
     self.search();
   };
-  self.filterByRadius = function(data) {
-    self.activeRadiusFilter(data);
+  // Filter by radius. Set active radius to radiusFilter parameter, and perform
+  // new search
+  self.filterByRadius = function(radiusFilter) {
+    self.activeRadiusFilter(radiusFilter);
     self.search();
   };
   // Display markers on google map
@@ -125,6 +114,34 @@ var ViewModel = function() {
     self.restaurants().forEach(function(restaurant) {
       restaurant.marker.setMap(null);
     });
+  };
+  // Clear map and restaurant data
+  self.clearData = function() {
+    self.removeAllMarkers();
+    self.restaurants.removeAll();
+    map.setCenter(locationCenter); // Center map to default location
+  };
+  // Map yelp business data into a restaurant object, and return restaurant
+  // object to use internally
+  self.mapYelp2Local = function(business) {
+    var restaurant = {
+      id: business.id,
+      name: business.name,
+      url: business.url,
+      // Store position in lat/lng format usable by google maps
+      position: {
+        lat: business.coordinates.latitude,
+        lng: business.coordinates.longitude
+      },
+      location: business.location,
+      price: business.price,
+      categories: business.categories,
+      rating: business.rating,
+      star_img: self.getYelpStarIMG(business.rating),
+      review_count: business.review_count,
+      phone: business.phone
+    };
+    return restaurant;
   };
   // Toggle active class on list items
   self.selectListRestaurant = function(restaurant) {
