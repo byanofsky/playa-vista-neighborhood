@@ -68,7 +68,7 @@ var ViewModel = function() {
       // Display all markers on map
       self.displayAllMarkers();
       // Adjust map bounds to fit all markers
-      fitLocationMarkers(self.restaurants());
+      fitRestaurantMarkers(self.restaurants());
       // Turn off restaurant data loading observable
       self.restaurantsLoading(false);
     }).fail(function(data) {

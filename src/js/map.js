@@ -237,7 +237,7 @@ function initMap() {
     if ($(window).width() >= 768) {
       toggleOffcanvas();
       // Adjust bounds to account for offcanvas list
-      fitLocationMarkers(viewModelInstance.restaurants());
+      fitRestaurantMarkers(viewModelInstance.restaurants());
     }
     // Map is done loading
     viewModelInstance.mapLoading(false);
@@ -254,16 +254,16 @@ function createMarker(restaurant) {
   });
   // Add listener to fire actions when marker selected
   marker.addListener('click', function() {
-    selectMarker(marker, restaurant);
+    selectMarker(this, restaurant);
   });
   return marker;
 }
 
-// Adjust map bounds to fit all location markers
-function fitLocationMarkers(locations) {
+// Adjust map bounds to fit all restaurant markers
+function fitRestaurantMarkers(restaurants) {
   var bounds = new google.maps.LatLngBounds();
-  locations.forEach(function(location) {
-    bounds.extend(location.position);
+  restaurants.forEach(function(restaurant) {
+    bounds.extend(restaurant.position);
   });
   map.fitBounds(bounds);
 }
@@ -298,16 +298,3 @@ function populateInfoWindow(restaurant) {
   content += '<p>Based On ' + restaurant.review_count + ' ' + (restaurant.review_count === 1 ? 'Review' : 'Reviews') + '</p>';
   infowindow.setContent(content);
 }
-
-// Turns a location into a location using geocode service, and creates marker
-// function geocodeAddressToMarker(location, map, geocoder, markers) {
-//   geocoder.geocode({
-//     address: location.address
-//   }, function(results, status) {
-//     if (status === 'OK') {
-//       markers.push(createMarker(results[0].geometry.location, map, location.name));
-//     } else {
-//       alert('Geocode was not successful for the following reason: ' + status);
-//     }
-//   });
-// }
