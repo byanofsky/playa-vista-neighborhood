@@ -1,9 +1,6 @@
 // Declare variables to reference outside initMap
 // Google map
 var map;
-// Google API Services
-var geocoder;
-var placesService;
 // Google maps info window
 var infowindow;
 
@@ -221,10 +218,6 @@ function initMap() {
   map.mapTypes.set('styled_map', styledMapType);
   map.setMapTypeId('styled_map');
 
-  // Initialize geocoder service
-  geocoder = new google.maps.Geocoder();
-  // Initialize places service
-  placesService = new google.maps.places.PlacesService(map);
   // Initialize infowinfow
   infowindow = new google.maps.InfoWindow();
 
@@ -233,12 +226,6 @@ function initMap() {
 
   // Toogle off canvas list once map has loaded
   google.maps.event.addListenerOnce(map, 'idle', function() {
-    // Show offcanvas menu by default when window >= 768
-    if ($(window).width() >= 768) {
-      toggleOffcanvas();
-      // Adjust bounds to account for offcanvas list
-      fitRestaurantMarkers(viewModelInstance.restaurants());
-    }
     // Map is done loading
     viewModelInstance.mapLoading(false);
   });
