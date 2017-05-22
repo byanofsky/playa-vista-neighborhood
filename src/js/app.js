@@ -169,17 +169,3 @@ var ViewModel = function() {
 var viewModelInstance = new ViewModel();
 
 ko.applyBindings(viewModelInstance);
-
-$(document).ready(function () {
-  // Set the main content height to match screen size
-  setMainContentHeight();
-  // Adjust main content height when window resizes
-  $( window ).resize(setMainContentHeight);
-
-  // Change height of main content to keep app full height
-  function setMainContentHeight() {
-    var windowHeight = $(window).height();
-    var navbarHeight = $('.navbar').height();
-    $('#main-content').height(windowHeight-navbarHeight);
-  }
-});
