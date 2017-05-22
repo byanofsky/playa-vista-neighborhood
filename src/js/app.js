@@ -1,6 +1,6 @@
 // Set location center
 var locationCenter = {lat: 33.9739136, lng: -118.4161883};
-// Set internal middleman url to make calls to yelp api
+// Set backend server url to make calls to yelp api
 var yelpApiUrl = "http://localhost:5000/";
 
 var ViewModel = function() {
