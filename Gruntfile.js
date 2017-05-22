@@ -106,7 +106,7 @@ module.exports = function(grunt) {
         files: {
           'dist/js/app.min.js': ['src/js/app.js'],
           'dist/js/map.min.js': ['src/js/map.js'],
-          'dist/js/offcanvas.min.js': ['src/js/offcanvas.js']
+          'dist/js/view.min.js': ['src/js/view.js']
         }
       }
     }
