@@ -241,6 +241,8 @@ function createMarker(restaurant) {
   });
   // Add listener to fire actions when marker selected
   marker.addListener('click', function() {
+    // Change active restaurant
+    viewModelInstance.activeRestaurant(restaurant);
     selectMarker(this, restaurant);
   });
   return marker;
