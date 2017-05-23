@@ -7,6 +7,8 @@ var ViewModel = function() {
   var self = this;
   // Track restaurant data
   self.restaurants = ko.observableArray();
+  // Get eatlist from localStorage or create blank one
+  self.eatlist = localStorage.hasOwnProperty('eatlist') ? JSON.parse(localStorage.eatlist) : {};
   self.activeRestaurant = ko.observable();
   // Track restaurant category data
   self.categories = ko.observableArray(
@@ -106,6 +108,25 @@ var ViewModel = function() {
     self.activeRadiusFilter(radiusFilter);
     self.search();
   };
+  // Filter results shown to only those on the eatlist
+  self.filterEatlist = function() {
+    console.log('eatlist triggered');
+    self.restaurants().forEach(function(restaurant) {
+      console.log(restaurant.eatlist());
+      if (! restaurant.eatlist()) {
+        self.hiddenRestaurants.push(restaurant);
+        return;
+      }
+      console.log(restaurant.name);
+      self.visibleRestaurants.push(restaurant);
+    });
+    self.clearData();
+    self.restaurants(self.visibleRestaurants());
+    // Display markers for visible restaurants on map
+    self.displayAllMarkers();
+    // Adjust map bounds to fit all markers
+    fitRestaurantMarkers(self.restaurants());
+  };
   // Display markers on google map
   self.displayAllMarkers = function() {
     self.restaurants().forEach(function(restaurant) {
@@ -142,7 +163,7 @@ var ViewModel = function() {
       rating: business.rating,
       review_count: business.review_count,
       phone: business.phone,
-      eatlist: ko.observable(localStorage[business.id] === 'true')
+      eatlist: ko.observable(self.eatlist[business.id])
     };
     return restaurant;
   };
@@ -164,7 +185,12 @@ var ViewModel = function() {
   self.toggleEatlist = function() {
     var newVal = ! this.eatlist();
     this.eatlist(newVal);
-    localStorage[this.id] = newVal;
+    if (newVal) {
+      self.eatlist[this.id] = true;
+    } else {
+      delete self.eatlist[this.id];
+    }
+    localStorage.eatlist = JSON.stringify(self.eatlist);
   };
 };
 
