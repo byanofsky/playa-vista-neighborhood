@@ -236,7 +236,6 @@ function createMarker(restaurant) {
   var marker = new google.maps.Marker({
     position: restaurant.position,
     title: restaurant.name,
-    animation: google.maps.Animation.DROP,
     restaurant: restaurant
   });
   // Add listener to fire actions when marker selected
