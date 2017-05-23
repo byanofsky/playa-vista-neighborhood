@@ -141,7 +141,8 @@ var ViewModel = function() {
       categories: business.categories,
       rating: business.rating,
       review_count: business.review_count,
-      phone: business.phone
+      phone: business.phone,
+      eatlist: ko.observable(localStorage[business.id] === 'true')
     };
     return restaurant;
   };
@@ -158,6 +159,12 @@ var ViewModel = function() {
       // Trigger resize for map since #map-container changes size
       google.maps.event.trigger(map, 'resize');
     }
+  };
+  // Toggle restaurant on eatlist
+  self.toggleEatlist = function() {
+    var newVal = ! this.eatlist();
+    this.eatlist(newVal);
+    localStorage[this.id] = newVal;
   };
 };
 

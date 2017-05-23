@@ -87,6 +87,21 @@ html, body {
   to {transform:rotate(360deg);}
 }
 
+.eatlist-toggle:hover,
+.eatlist-toggle:focus {
+  color: #337ab7;
+}
+
+.eatlist-toggle:before {
+  background: #e8e8e8;
+  padding: 5px;
+}
+
+.eatlist-toggle.active:before {
+  background: green;
+  color: #fff;
+}
+
 /*
  * Off Canvas - http://getbootstrap.com/examples/offcanvas/
  * --------------------------------------------------
