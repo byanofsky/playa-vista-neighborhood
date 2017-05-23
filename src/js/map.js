@@ -267,21 +267,32 @@ function openInfoWindow(marker, restaurant) {
 }
 
 // Populate info window with restaurant information
-function populateInfoWindow(restaurant) {
-  var content = '';
-  content += '<h5>' + restaurant.name + '</h5>';
-  if (restaurant.location.display_address) {
-    content += '<p>';
-    content += restaurant.location.display_address.join(', ');
-    content += '</p>';
+function populateInfoWindow(r) {
+  // Using `r` instead of `restaurant`
+  var content = '<h5>' + r.name + '</h5>';
+
+  // Address
+  if (r.location.display_address) {
+    content += '<p>' + r.location.display_address.join(', ') + '</p>';
   }
-  var imgFile = (function() {
-    var file = 'img/' + restaurant.star_img;
-    return function(px) {
-      return file + (px || '') + '.png';
-    };
-  })();
-  content += '<img src="' + imgFile() + '"  srcset="' + imgFile('@2x') + ' 2x, ' + imgFile('@3x') + ' 3x">';
-  content += '<p>Based On ' + restaurant.review_count + ' ' + (restaurant.review_count === 1 ? 'Review' : 'Reviews') + '</p>';
+
+  // Yelp star rating image
+  var starImgFile = 'img/small_' + String(r.rating).replace('.5', '_half');
+  var starImgSrcSet = '<img class="yelp-star-rating" src="{{imgFile}}.png"  srcset="{{imgFile}}@2x.png 2x, {{imgFile}}@3x.png 3x">';
+  var yelpRatingImg = starImgSrcSet.replace(/{{imgFile}}/g, starImgFile);
+
+  // Yelp logo
+  var yelpLogo = '<a href="' + r.url + '" target="_blank"><img class="yelp-logo" src="img/yelp_logo.png" width="100" height="64"></a>';
+
+  var yelpRating = '<div class="yelp-rating">' +
+                   yelpRatingImg +
+                   yelpLogo +
+                   '</div>';
+  content += yelpRating;
+
+  // Review count
+  content += '<p>Based On ' + r.review_count + ' ' + (r.review_count === 1 ? 'Review' : 'Reviews') + '</p>';
+
+  // Set content to info window
   infowindow.setContent(content);
 }

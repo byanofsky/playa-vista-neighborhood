@@ -140,7 +140,6 @@ var ViewModel = function() {
       price: business.price,
       categories: business.categories,
       rating: business.rating,
-      star_img: self.getYelpStarIMG(business.rating),
       review_count: business.review_count,
       phone: business.phone
     };
@@ -150,10 +149,6 @@ var ViewModel = function() {
   self.selectListRestaurant = function(restaurant) {
     self.activeRestaurant(restaurant);
     selectMarker(restaurant.marker, restaurant);
-  };
-  // Get yelp star image according to rating
-  self.getYelpStarIMG = function(rating) {
-    return 'small_' + String(rating).replace('.5', '_half');
   };
   // Toggle offcanvas restaurant list
   self.toggleOffcanvas = function() {
