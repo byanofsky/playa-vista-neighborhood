@@ -9,7 +9,7 @@ module.exports = function(grunt) {
     watch: {
       scripts: {
         files: 'src/**/*.js',
-        tasks: ['jshint', 'uglify:dev']
+        tasks: ['jshint', 'copy:devScripts']
       },
       styles: {
         files: 'src/**/*.css',
@@ -22,51 +22,31 @@ module.exports = function(grunt) {
       python: {
         files: 'src/**/*.py',
         tasks: ['copy:python']
+      },
+      img: {
+        files: 'src/img/**/*',
+        tasks: ['copy:img']
       }
     },
     copy: {
-      build: {
-        files: [
-          {
-            expand: true,
-            src: 'node_modules/knockout/build/output/knockout-latest.js',
-            dest: 'dist/js/',
-            flatten: true,
-            rename: function (dest, src) {
-              return dest + 'knockout.js';
-            }
-          }
-        ]
-      },
       python: {
-        files: [
-          {
-            expand: true,
-            flatten: true,
-            src: 'src/**/*.py',
-            dest: 'dist/'
-          }
-        ]
-      },
-      fonts: {
-        files: [
-          {
-            expand: true,
-            flatten: true,
-            src: 'src/fonts/*',
-            dest: 'dist/fonts/'
-          }
-        ]
+        expand: true,
+        cwd: 'src',
+        src: ['**/*.py', '!config-sample.py'],
+        dest: 'dist/'
       },
       img: {
-        files: [
-          {
-            expand: true,
-            flatten: true,
-            src: 'src/img/*',
-            dest: 'dist/img/'
-          }
-        ]
+        expand: true,
+        cwd: 'src/img',
+        src: '**/*',
+        dest: 'dist/img/'
+      },
+      devScripts: {
+        expand: true,
+        cwd: 'src/js',
+        src: '*.js',
+        dest: 'dist/js',
+        ext: '.min.js'
       }
     },
     htmlmin: {
@@ -75,13 +55,14 @@ module.exports = function(grunt) {
           removeComments: false,
           collapseWhitespace: true
         },
-        files: {
-          'dist/index.html': 'src/index.html'
-        }
+        expand: true,
+        cwd: 'src/',
+        src: '**/*.html',
+        dest: 'dist/'
       }
     },
     cssmin: {
-      target: {
+      build: {
         files: [{
           expand: true,
           cwd: 'src/css',
@@ -92,22 +73,12 @@ module.exports = function(grunt) {
       }
     },
     uglify: {
-      target: {
-        files: {
-          'dist/js/app.min.js': ['src/js/app.js'],
-          'dist/js/map.min.js': ['src/js/map.js']
-        }
-      },
-      dev: {
-        options: {
-          beautify: true,
-          compress: false
-        },
-        files: {
-          'dist/js/app.min.js': ['src/js/app.js'],
-          'dist/js/map.min.js': ['src/js/map.js'],
-          'dist/js/view.min.js': ['src/js/view.js']
-        }
+      build: {
+        expand: true,
+        cwd: 'src/js',
+        src: '*.js',
+        dest: 'dist/js',
+        ext: '.min.js'
       }
     }
   });
@@ -120,6 +91,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
   // Default task(s).
-  grunt.registerTask('default', ['jshint']);
-
+  grunt.registerTask('buildDev', ['jshint', 'copy', 'htmlmin', 'cssmin']);
+  grunt.registerTask(
+    'build',
+    ['jshint', 'copy:python', 'copy:img', 'htmlmin', 'cssmin', 'uglify']
+  );
 };
