@@ -100,7 +100,7 @@
                     data-bind="click: $root.selectListRestaurant,
                                css: { active: $root.activeRestaurant() === $data }">
               <span data-bind="text: name"></span>
-              <span data-bind="click: $root.toggleEatlist, css: { active: eatlist }" class="eatlist-toggle glyphicon glyphicon-thumbs-up"></span>
+              <span data-bind="click: $root.toggleEatlist, css: { active: eatlistState }" class="eatlist-toggle glyphicon glyphicon-thumbs-up"></span>
             </button>
           </div><!--/.list-group-->
         </div><!--/.list-->
