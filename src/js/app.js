@@ -5,6 +5,13 @@ var yelpApiUrl = "http://localhost:5000/";
 
 var ViewModel = function() {
   var self = this;
+
+  // Initialize ViewModel
+  self.init = function() {
+    // Load eatlist from localStorage
+    self.loadEatlist();
+  };
+
   // Track restaurant data
   self.restaurants = ko.observableArray();
   // Get eatlist from localStorage or create blank one
@@ -197,11 +204,9 @@ var ViewModel = function() {
     self.eatlist(localStorage.hasOwnProperty('eatlist') ?
       JSON.parse(localStorage.eatlist) : []);
   };
-
-  // Initialize ViewModel
-  self.loadEatlist();
 };
 
 var viewModelInstance = new ViewModel();
+viewModelInstance.init();
 
 ko.applyBindings(viewModelInstance);
