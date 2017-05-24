@@ -77,10 +77,6 @@ var ViewModel = function() {
         // Add new restaurant to `restaurants` observable array
         self.restaurants.push(restaurant);
       });
-      // Display all markers on map
-      self.displayAllMarkers();
-      // Adjust map bounds to fit all markers
-      fitRestaurantMarkers(self.restaurants());
       // Turn off restaurant data loading observable
       self.restaurantsLoading(false);
     }).fail(function(data) {
@@ -124,7 +120,19 @@ var ViewModel = function() {
     self.restaurants().forEach(function(restaurant) {
       restaurant.marker.setMap(map);
     });
+    // Adjust map bounds to fit all markers
+    fitRestaurantMarkers(self.restaurants());
   };
+  // Listen when dataLoading tracker switches to false and fire map markers.
+  // When dataLoading goes from true to false, data has just completed loading
+  // from map and restaurant data calls.
+  self.dataLoading.subscribe(function(newValue) {
+    if (newValue === false) {
+      console.log('Map and restaurant data has completed loading.');
+      console.log('Mapping markers.');
+      self.displayAllMarkers();
+    }
+  });
   // Remove all markers from google map
   self.removeAllMarkers = function() {
     self.restaurants().forEach(function(restaurant) {
