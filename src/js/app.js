@@ -10,6 +10,8 @@ var ViewModel = function() {
   self.init = function() {
     // Load eatlist from localStorage
     self.loadEatlist();
+    // Perform initial search
+    self.search();
   };
 
   // Track restaurant data
@@ -60,8 +62,10 @@ var ViewModel = function() {
       radius: self.activeRadiusFilter().value,
       sort_by: 'rating' // Show highest rated first
     }, function( data ) {
-      // Remove current map and restaurant data
-      self.clearData();
+      // Remove any existing markers
+      self.removeAllMarkers();
+      // Remove current current restaurant data
+      self.restaurants.removeAll();
       // Map needed data to an object
       // TODO: might be able to use `map` here instead
       data.businesses.forEach(function(business) {
@@ -72,8 +76,6 @@ var ViewModel = function() {
         }
         // Turn yelp data into an internal restaurant object
         var restaurant = self.mapYelp2Local(business);
-        // Create a marker, and assign to restaurant
-        restaurant.marker = createMarker(restaurant);
         // Add new restaurant to `restaurants` observable array
         self.restaurants.push(restaurant);
       });
@@ -115,8 +117,17 @@ var ViewModel = function() {
   self.filterEatlist = function() {
     console.log('eatlist triggered');
   };
+  // Cycle through restaurants and create markers
+  self.createMarkers = function() {
+    self.restaurants().forEach(function(restaurant) {
+      // Create a marker, and assign to restaurant
+      restaurant.marker = createMarker(restaurant);
+    });
+  };
   // Display markers on google map
   self.displayAllMarkers = function() {
+    map.setCenter(locationCenter); // Center map to default location
+    self.createMarkers();
     self.restaurants().forEach(function(restaurant) {
       restaurant.marker.setMap(map);
     });
@@ -138,12 +149,6 @@ var ViewModel = function() {
     self.restaurants().forEach(function(restaurant) {
       restaurant.marker.setMap(null);
     });
-  };
-  // Clear map and restaurant data
-  self.clearData = function() {
-    self.removeAllMarkers();
-    self.restaurants.removeAll();
-    map.setCenter(locationCenter); // Center map to default location
   };
   // Map yelp business data into a restaurant object, and return restaurant
   // object to use internally

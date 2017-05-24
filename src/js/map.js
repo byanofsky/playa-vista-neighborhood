@@ -221,9 +221,6 @@ function initMap() {
   // Initialize infowinfow
   infowindow = new google.maps.InfoWindow();
 
-  // Load initial restaurant data once google maps api loaded
-  viewModelInstance.yelpRestaurantSearch();
-
   // Toogle off canvas list once map has loaded
   google.maps.event.addListenerOnce(map, 'idle', function() {
     // Map is done loading
