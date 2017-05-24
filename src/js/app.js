@@ -10,6 +10,8 @@ var ViewModel = function() {
   self.init = function() {
     // Load eatlist from localStorage
     self.loadEatlist();
+    // Load options from localStorage
+    self.loadOptions();
     // Perform initial search
     self.search();
   };
@@ -31,15 +33,16 @@ var ViewModel = function() {
       { value: 'vegetarian', label: 'Vegetarian'}
     ]
   );
-  self.defaultCategory = ko.observable(self.categories()[0]);
-  self.activeCategory = ko.observable(self.defaultCategory());
+  self.defaultCategory = self.categories()[0];
+  self.activeCategory = ko.observable();
   // Track distance/radius filter data
   self.radiusFilters = ko.observableArray([
     { value: 1609, label: '1 Mile'},
     { value: 3218, label: '2 Miles'},
     { value: 4828, label: '3 Miles'}
   ]);
-  self.activeRadiusFilter = ko.observable(self.radiusFilters()[0]);
+  self.defaultRadiusFilter = self.radiusFilters()[0];
+  self.activeRadiusFilter = ko.observable();
   // Track what data is loading. Defaults to true.
   self.mapLoading = ko.observable(true); // Google maps data
   self.restaurantsLoading = ko.observable(true); // Restaurant data
@@ -220,9 +223,23 @@ var ViewModel = function() {
   // Load eatlist from localStorage
   self.loadEatlist = function() {
     // Load eatlist if it exists in local storage, or initialize empty array
+    // TODO: should not be hasownproperty, but not undefined
     self.eatlist(localStorage.hasOwnProperty('eatlist') ?
       JSON.parse(localStorage.eatlist) : []);
   };
+  // Load options data from localStorage
+  self.loadOptions = function() {
+    self.activeCategory(localStorage.activeCategory ? JSON.parse(localStorage.activeCategory) : self.defaultCategory);
+    self.activeRadiusFilter(localStorage.activeRadiusFilter ? JSON.parse(localStorage.activeRadiusFilter) : self.defaultRadiusFilter);
+  };
+  // When change active category, save it to localStorage
+  self.activeCategory.subscribe(function() {
+    localStorage.activeCategory = JSON.stringify(self.activeCategory());
+  });
+  // When change active radius filter, save it to localStorage
+  self.activeRadiusFilter.subscribe(function() {
+    localStorage.activeRadiusFilter = JSON.stringify(self.activeRadiusFilter());
+  });
 };
 
 var viewModelInstance = new ViewModel();
