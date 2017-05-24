@@ -8,10 +8,7 @@ var ViewModel = function() {
   // Track restaurant data
   self.restaurants = ko.observableArray();
   // Get eatlist from localStorage or create blank one
-  self.eatlist = ko.observableArray(
-    localStorage.hasOwnProperty('eatlist') ?
-      JSON.parse(localStorage.eatlist) : []
-  );
+  self.eatlist = ko.observableArray();
   self.activeRestaurant = ko.observable();
   // Track restaurant category data
   self.categories = ko.observableArray(
@@ -154,6 +151,11 @@ var ViewModel = function() {
       // Check if restaurant on eatlist
       eatlistState: ko.observable(self.eatlist.indexOf(business.id) !== -1)
     };
+    restaurant.eatlistState.subscribe(function() {
+      console.log('Eatlist state changed');
+      // Save eatlist to local storage
+      self.saveEatlist();
+    });
     return restaurant;
   };
   // Toggle active class on list items
@@ -174,7 +176,6 @@ var ViewModel = function() {
   self.toggleEatlist = function() {
     // Get opposite of current state
     var newVal = ! this.eatlistState();
-    this.eatlistState(newVal);
     // TODO: what if value there twice? Maybe need an object instead
     // If value is positive, needs to be added to list.
     // Otherwise, remove from list
@@ -183,9 +184,22 @@ var ViewModel = function() {
     } else {
       self.eatlist.remove(this.id);
     }
-    // Save eatlist to local storage
-    localStorage.eatlist = JSON.stringify(self.eatlist());
+    this.eatlistState(newVal);
   };
+  // Save eatlist to localStorage
+  self.saveEatlist = function() {
+    localStorage.eatlist = JSON.stringify(self.eatlist());
+    console.log('Eatlist saved to localStorage');
+  };
+  // Load eatlist from localStorage
+  self.loadEatlist = function() {
+    // Load eatlist if it exists in local storage, or initialize empty array
+    self.eatlist(localStorage.hasOwnProperty('eatlist') ?
+      JSON.parse(localStorage.eatlist) : []);
+  };
+
+  // Initialize ViewModel
+  self.loadEatlist();
 };
 
 var viewModelInstance = new ViewModel();
