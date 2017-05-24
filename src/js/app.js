@@ -18,6 +18,8 @@ var ViewModel = function() {
   self.restaurants = ko.observableArray();
   // Get eatlist from localStorage or create blank one
   self.eatlist = ko.observableArray();
+  // Restaurant markers
+  self.markers = [];
   self.activeRestaurant = ko.observable();
   // Track restaurant category data
   self.categories = ko.observableArray(
@@ -62,8 +64,6 @@ var ViewModel = function() {
       radius: self.activeRadiusFilter().value,
       sort_by: 'rating' // Show highest rated first
     }, function( data ) {
-      // Remove any existing markers
-      self.removeAllMarkers();
       // Remove current current restaurant data
       self.restaurants.removeAll();
       // Map needed data to an object
@@ -120,16 +120,21 @@ var ViewModel = function() {
   // Cycle through restaurants and create markers
   self.createMarkers = function() {
     self.restaurants().forEach(function(restaurant) {
+      var marker = createMarker(restaurant);
       // Create a marker, and assign to restaurant
-      restaurant.marker = createMarker(restaurant);
+      self.markers.push(marker);
+      restaurant.marker = marker;
     });
   };
   // Display markers on google map
   self.displayAllMarkers = function() {
+    // Remove the existing markers
+    self.removeAllMarkers();
     map.setCenter(locationCenter); // Center map to default location
+    // Create markers from restaurant list
     self.createMarkers();
-    self.restaurants().forEach(function(restaurant) {
-      restaurant.marker.setMap(map);
+    self.markers.forEach(function(marker) {
+      marker.setMap(map);
     });
     // Adjust map bounds to fit all markers
     fitRestaurantMarkers(self.restaurants());
@@ -146,9 +151,10 @@ var ViewModel = function() {
   });
   // Remove all markers from google map
   self.removeAllMarkers = function() {
-    self.restaurants().forEach(function(restaurant) {
-      restaurant.marker.setMap(null);
+    self.markers.forEach(function(marker) {
+      marker.setMap(null);
     });
+    self.markers = [];
   };
   // Map yelp business data into a restaurant object, and return restaurant
   // object to use internally
