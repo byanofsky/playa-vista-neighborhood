@@ -53,6 +53,8 @@ var ViewModel = function() {
   // Track if offcanvas list should be visible or not.
   // If window width is greater than 768px, show by default.
   self.offcanvasActive = ko.observable($(window).width() >= 768);
+  // Track if retry search should show
+  self.retrySearchStatus = ko.observable(false);
 
   // Behaviors
   // Perform yelp search, using `activeCategory` and `activeRadiusFilter`
@@ -88,14 +90,19 @@ var ViewModel = function() {
       // TODO: what happens on fail. revert back
       console.log('Something went wrong on server: ' + data.responseText);
       // If there was an issue with data load, turn data laoding off
-      if (self.dataLoading()) self.dataLoading(false);
-      window.alert('There was an issue loading data');
+      if (self.dataLoading()) self.restaurantsLoading(false);
+      self.retrySearchStatus(true);
     });
   };
   // Change what search results are shown
   self.search = function() {
     // Perform yelp search
     self.yelpRestaurantSearch();
+  };
+  // Attempt to search again if it failed
+  self.retrySearch = function() {
+    self.retrySearchStatus(false);
+    self.search();
   };
   // Display all locations. Set active category to default
   // and perform new search

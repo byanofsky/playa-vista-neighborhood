@@ -29,6 +29,14 @@
       <span class="sr-only">Loading...</span>
     </div> <!--/.loading-spinner-->
 
+    <!-- Retry Search -->
+    <div class="retry-search" data-bind="visible: retrySearchStatus, click: retrySearch" style="display: none;">
+      <div class="retry-search-container">
+        <span>Search failed. Would you like to retry?</span>
+        <button type="button">Yes</button>
+      </div>
+    </div>
+
     <!-- Navbar -->
     <nav class="navbar navbar-default">
       <div class="container-fluid">
