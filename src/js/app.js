@@ -64,48 +64,13 @@ var ViewModel = function() {
   // Will be true if yelp api data load fails.
   self.retrySearchStatus = ko.observable(false);
 
-  // Behaviors
-  // Perform yelp search, using `activeCategory` and `activeRadiusFilter`
-  self.yelpRestaurantSearch = function() {
-    // Set restaurants data loading observable to `true`
-    self.restaurantsLoading(true);
-    $.getJSON( yelpApiUrl, {
-      categories: self.activeCategory().value,
-      latitude: locationCenter.lat,
-      longitude: locationCenter.lng,
-      limit: 50, // Limit results shown
-      radius: self.activeRadiusFilter().value,
-      sort_by: 'rating' // Show highest rated first
-    }, function( data ) {
-      // Remove current current restaurant data
-      self.restaurants.removeAll();
-      // Map needed data to an object
-      // TODO: might be able to use `map` here instead
-      data.businesses.forEach(function(business) {
-        // Check if business is within distance, otherwise skip.
-        // Reasoning: https://github.com/Yelp/yelp-api/issues/95
-        if (business.distance > self.activeRadiusFilter().value) {
-          return;
-        }
-        // Turn yelp data into an internal restaurant object
-        var restaurant = self.mapYelp2Local(business);
-        // Add new restaurant to `restaurants` observable array
-        self.restaurants.push(restaurant);
-      });
-      // Turn off restaurant data loading observable
-      self.restaurantsLoading(false);
-    }).fail(function(data) {
-      // TODO: what happens on fail. revert back
-      console.log('Something went wrong on server: ' + data.responseText);
-      // If there was an issue with data load, turn data laoding off
-      if (self.dataLoading()) self.restaurantsLoading(false);
-      self.retrySearchStatus(true);
-    });
-  };
-  // Change what search results are shown
+  // Perform a yelp restaurant search, using activeCategory
+  // and activeRadiusFilter as input
   self.search = function() {
+    var category = self.activeCategory().value;
+    var radiusFilter = self.activeRadiusFilter().value;
     // Perform yelp search
-    self.yelpRestaurantSearch();
+    yelpRestaurantSearch(category, radiusFilter);
   };
   // Attempt to search again if it failed
   self.retrySearch = function() {
@@ -270,6 +235,54 @@ var ViewModel = function() {
   self.activeRadiusFilter.subscribe(function() {
     localStorage.activeRadiusFilter = JSON.stringify(self.activeRadiusFilter());
   });
+
+
+  // Perform yelp search, with category and radiusFilter parameters
+  var yelpRestaurantSearch = function(category, radiusFilter) {
+    // Parameters for Yelp search
+    var searchParams = {
+      categories: category,
+      latitude: locationCenter.lat,
+      longitude: locationCenter.lng,
+      limit: 50, // Limit results shown
+      radius: radiusFilter,
+      sort_by: 'rating' // Show highest rated first
+    };
+    // Set restaurants data loading observable to `true`
+    self.restaurantsLoading(true);
+    // JSON call to Yelp api middleman server
+    $.getJSON( yelpApiUrl, searchParams)
+      .done(searchSuccessHandler)
+      .fail(searchFailHandler)
+      .always(function() {
+        // Turn off restaurants data loading, whether failed or not
+        self.restaurantsLoading(false);
+    });
+  };
+  // Runs on yelp api search success
+  var searchSuccessHandler = function(data) {
+    // Remove current current restaurant data
+    self.restaurants.removeAll();
+    // Map needed data to an object
+    // TODO: might be able to use `map` here instead
+    data.businesses.forEach(function(business) {
+      // Check if business is within distance, otherwise skip.
+      // Reasoning: https://github.com/Yelp/yelp-api/issues/95
+      if (business.distance > self.activeRadiusFilter().value) {
+        return;
+      }
+      // Turn yelp data into an internal restaurant object
+      var restaurant = self.mapYelp2Local(business);
+      // Add new restaurant to `restaurants` observable array
+      self.restaurants.push(restaurant);
+    });
+  };
+  // Runs when yelp api search fails
+  var searchFailHandler = function(data) {
+    // TODO: what happens on fail. revert back
+    console.log('Something went wrong on server: ' + data.responseText);
+    self.retrySearchStatus(true);
+  };
 };
 
 var viewModelInstance = new ViewModel();
