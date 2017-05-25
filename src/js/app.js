@@ -18,12 +18,13 @@ var ViewModel = function() {
 
   // Track restaurant data
   self.restaurants = ko.observableArray();
-  // Get eatlist from localStorage or create blank one
-  self.eatlist = ko.observableArray();
-  // Restaurant markers
+  // Restaurant map markers
   self.markers = [];
+  // Current active/selected restaurant
   self.activeRestaurant = ko.observable();
-  // Track restaurant category data
+  // Track the user's eatlist
+  self.eatlist = ko.observableArray();
+  // Restaurant categories
   self.categories = ko.observableArray(
     [
       { value: 'restaurants', label: 'All Restaurants' },
@@ -33,19 +34,25 @@ var ViewModel = function() {
       { value: 'vegetarian', label: 'Vegetarian'}
     ]
   );
+  // Default restaurant category
   self.defaultCategory = self.categories()[0];
+  // Current active/selected category
   self.activeCategory = ko.observable();
-  // Track distance/radius filter data
+  // Radius/distance filters
   self.radiusFilters = ko.observableArray([
+    // Value in meters
     { value: 1609, label: '1 Mile'},
     { value: 3218, label: '2 Miles'},
     { value: 4828, label: '3 Miles'}
   ]);
+  // Default radius/distance filter
   self.defaultRadiusFilter = self.radiusFilters()[0];
+  // Current active/selected radius/distance filter
   self.activeRadiusFilter = ko.observable();
-  // Track what data is loading. Defaults to true.
+  // Track when data is loading.
+  // `true` === loading, `false` === not loading.
   self.mapLoading = ko.observable(true); // Google maps data
-  self.restaurantsLoading = ko.observable(true); // Restaurant data
+  self.restaurantsLoading = ko.observable(true); // Yelp Restaurant data
   // Track if any data loading
   self.dataLoading = ko.computed(function() {
     return self.mapLoading() || self.restaurantsLoading();
@@ -53,7 +60,8 @@ var ViewModel = function() {
   // Track if offcanvas list should be visible or not.
   // If window width is greater than 768px, show by default.
   self.offcanvasActive = ko.observable($(window).width() >= 768);
-  // Track if retry search should show
+  // Track if retry search window should show.
+  // Will be true if yelp api data load fails.
   self.retrySearchStatus = ko.observable(false);
 
   // Behaviors
