@@ -72,18 +72,20 @@ var ViewModel = function() {
     // Perform yelp search
     yelpRestaurantSearch(category, radiusFilter);
   };
-  // Attempt to search again if it failed
+  // Retry search function, specifically for use when a search fails
   self.retrySearch = function() {
+    // Set retry search status to false. Was turned to true when search failed.
     self.retrySearchStatus(false);
     self.search();
   };
-  // Cancel search
+  // Cancel search functions, specifically for use when a search fails
   self.cancelSearch = function() {
     console.log('Cancel search');
     console.log(self.oldCategory, self.oldRadiusFilter);
     if (self.oldCategory) self.activeCategory(self.oldCategory);
     if (self.oldRadiusFilter) self.activeRadiusFilter(self.oldRadiusFilter);
     self.retrySearchStatus(false);
+    // TODO: revert conditions back to before search failed
   };
   // Display all locations. Set active category to default
   // and perform new search
