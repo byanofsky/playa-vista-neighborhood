@@ -87,13 +87,6 @@ var ViewModel = function() {
     self.retrySearchStatus(false);
     // TODO: revert conditions back to before search failed
   };
-  // Display all locations. Set active category to default
-  // and perform new search
-  self.showAllCategories = function() {
-    // Set active search to default category
-    self.activeCategory(self.defaultCategory);
-    self.search();
-  };
   // Store current options if needed again
   self.storeCurrentOptions = function() {
     console.log('Store current options');
