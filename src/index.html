@@ -30,10 +30,11 @@
     </div> <!--/.loading-spinner-->
 
     <!-- Retry Search -->
-    <div class="retry-search" data-bind="visible: retrySearchStatus, click: retrySearch" style="display: none;">
+    <div class="retry-search" data-bind="visible: retrySearchStatus" style="display: none;">
       <div class="retry-search-container">
         <span>Search failed. Would you like to retry?</span>
-        <button type="button">Yes</button>
+        <button data-bind="click: retrySearch" type="button">Yes</button>
+        <button data-bind="click: cancelSearch" type="button">No</button>
       </div>
     </div>
 

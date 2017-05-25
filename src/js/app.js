@@ -104,12 +104,27 @@ var ViewModel = function() {
     self.retrySearchStatus(false);
     self.search();
   };
+  // Cancel search
+  self.cancelSearch = function() {
+    console.log('Cancel search');
+    console.log(self.oldCategory, self.oldRadiusFilter);
+    if (self.oldCategory) self.activeCategory(self.oldCategory);
+    if (self.oldRadiusFilter) self.activeRadiusFilter(self.oldRadiusFilter);
+    self.retrySearchStatus(false);
+  };
   // Display all locations. Set active category to default
   // and perform new search
   self.showAllCategories = function() {
     // Set active search to default category
     self.activeCategory(self.defaultCategory);
     self.search();
+  };
+  // Store current options if needed again
+  self.storeCurrentOptions = function() {
+    console.log('Store current options');
+    self.oldCategory = self.activeCategory();
+    self.oldRadiusFilter = self.activeRadiusFilter();
+    console.log(self.oldCategory, self.oldRadiusFilter);
   };
   // Filter by category. Set active category to category parameter, and perform
   // new search
