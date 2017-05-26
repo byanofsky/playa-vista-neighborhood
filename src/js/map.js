@@ -7,7 +7,7 @@ var infowindow;
 function initMap() {
   // Create a map object
   map = new google.maps.Map(document.getElementById('map'), {
-    center: locationCenter,
+    center: config.locationCenter,
     scrollwheel: true,
     zoom: 15,
     clickableIcons: false,

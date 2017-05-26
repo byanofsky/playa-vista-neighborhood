@@ -1,8 +1,3 @@
-// Set location center
-var locationCenter = {lat: 33.9739136, lng: -118.4161883};
-// Set backend server url to make calls to yelp api
-var yelpApiUrl = "http://localhost:5000/";
-
 // Class for restaurants, takes yelp business data as input
 var Restaurant = function(data) {
   // Map yelp business data into a restaurant object
@@ -204,8 +199,8 @@ var ViewModel = function() {
     // Parameters for Yelp search
     var searchParams = {
       categories: category,
-      latitude: locationCenter.lat,
-      longitude: locationCenter.lng,
+      latitude: config.locationCenter.lat,
+      longitude: config.locationCenter.lng,
       limit: 50, // Limit results shown
       radius: radiusFilter,
       sort_by: 'rating' // Show highest rated first
@@ -213,7 +208,7 @@ var ViewModel = function() {
     // Set restaurants data loading observable to `true`
     self.restaurantsLoading(true);
     // JSON call to Yelp api middleman server
-    $.getJSON( yelpApiUrl, searchParams)
+    $.getJSON( config.yelpApiUrl, searchParams)
       .done(searchSuccessHandler)
       .fail(searchFailHandler)
       .always(function() {
@@ -257,7 +252,7 @@ var ViewModel = function() {
   // Display markers on google map
   var displayNewMarkers = function() {
     removeAllMarkers(); // Remove the existing markers
-    centerMap(locationCenter); // Center map to default location
+    centerMap(config.locationCenter); // Center map to default location
     // Create markers from restaurant list, and display
     createAllMarkers();
     displayAllMarkers();
