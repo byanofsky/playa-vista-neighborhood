@@ -110,45 +110,21 @@ var ViewModel = function() {
   self.filterEatlist = function() {
     console.log('eatlist triggered');
   };
-  // Cycle through restaurants and create markers
-  self.createMarkers = function() {
-    self.restaurants().forEach(function(restaurant) {
-      var marker = createMarker(restaurant);
-      // Create a marker, and assign to restaurant
-      self.markers.push(marker);
-      restaurant.marker = marker;
-    });
-  };
-  // Display markers on google map
-  self.displayAllMarkers = function() {
-    // Remove the existing markers
-    self.removeAllMarkers();
-    map.setCenter(locationCenter); // Center map to default location
-    // Create markers from restaurant list
-    self.createMarkers();
-    self.markers.forEach(function(marker) {
-      marker.setMap(map);
-    });
-    // Adjust map bounds to fit all markers
-    fitRestaurantMarkers(self.restaurants());
-  };
+
   // Listen when dataLoading tracker switches to false and fire map markers.
   // When dataLoading goes from true to false, data has just completed loading
   // from map and restaurant data calls.
+  // This is because these functions require google maps api & restaurant data
+  // to be loaded.
   self.dataLoading.subscribe(function(newValue) {
     if (newValue === false) {
       console.log('Map and restaurant data has completed loading.');
       console.log('Mapping markers.');
-      self.displayAllMarkers();
+      newMarkers();
     }
   });
-  // Remove all markers from google map
-  self.removeAllMarkers = function() {
-    self.markers.forEach(function(marker) {
-      marker.setMap(null);
-    });
-    self.markers = [];
-  };
+
+
   // Map yelp business data into a restaurant object, and return restaurant
   // object to use internally
   self.mapYelp2Local = function(business) {
@@ -277,6 +253,43 @@ var ViewModel = function() {
     // TODO: what happens on fail. revert back
     console.log('Something went wrong on server: ' + data.responseText);
     self.retrySearchStatus(true);
+  };
+
+  // Display markers on google map
+  var newMarkers = function() {
+    removeAllMarkers(); // Remove the existing markers
+    centerMap(locationCenter); // Center map to default location
+    // Create markers from restaurant list, and display
+    createAllMarkers();
+    displayAllMarkers();
+    // Adjust map bounds to fit all markers
+    fitRestaurantMarkers(self.restaurants());
+  };
+  // Cycle through restaurants and create markers
+  var createAllMarkers = function() {
+    self.restaurants().forEach(function(restaurant) {
+      var marker = createMarker(restaurant);
+      // Create a marker, and assign to restaurant
+      self.markers.push(marker);
+      restaurant.marker = marker;
+    });
+  };
+  // Cycle through markers and assign them to map (make them visible)
+  var displayAllMarkers = function() {
+    self.markers.forEach(function(marker) {
+      marker.setMap(map);
+    });
+  };
+  // Remove all markers from google map
+  var removeAllMarkers = function() {
+    self.markers.forEach(function(marker) {
+      marker.setMap(null);
+    });
+    self.markers = [];
+  };
+  // // Center map to latLng location
+  var centerMap = function(latLng) {
+    map.setCenter(latLng);
   };
 };
 
