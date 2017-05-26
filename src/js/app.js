@@ -3,6 +3,25 @@ var locationCenter = {lat: 33.9739136, lng: -118.4161883};
 // Set backend server url to make calls to yelp api
 var yelpApiUrl = "http://localhost:5000/";
 
+// Class for restaurants, takes yelp business data as input
+var Restaurant = function(data) {
+  // Map yelp business data into a restaurant object
+  this.id = data.id;
+  this.name = data.name;
+  this.url = data.url;
+  // Store position in lat/lng format usable by google maps
+  this.position = {
+    lat: data.coordinates.latitude,
+    lng: data.coordinates.longitude
+  };
+  this.location = data.location;
+  this.price = data.price;
+  this.categories = data.categories;
+  this.rating = data.rating;
+  this.review_count = data.review_count;
+  this.phone = data.phone;
+};
+
 var ViewModel = function() {
   var self = this;
 
@@ -120,39 +139,11 @@ var ViewModel = function() {
     if (newValue === false) {
       console.log('Map and restaurant data has completed loading.');
       console.log('Mapping markers.');
-      newMarkers();
+      displayNewMarkers();
     }
   });
 
 
-  // Map yelp business data into a restaurant object, and return restaurant
-  // object to use internally
-  self.mapYelp2Local = function(business) {
-    var restaurant = {
-      id: business.id,
-      name: business.name,
-      url: business.url,
-      // Store position in lat/lng format usable by google maps
-      position: {
-        lat: business.coordinates.latitude,
-        lng: business.coordinates.longitude
-      },
-      location: business.location,
-      price: business.price,
-      categories: business.categories,
-      rating: business.rating,
-      review_count: business.review_count,
-      phone: business.phone,
-      // Check if restaurant on eatlist
-      eatlistState: ko.observable(self.eatlist.indexOf(business.id) !== -1)
-    };
-    restaurant.eatlistState.subscribe(function() {
-      console.log('Eatlist state changed');
-      // Save eatlist to local storage
-      self.saveEatlist();
-    });
-    return restaurant;
-  };
   // Toggle active class on list items
   self.selectListRestaurant = function(restaurant) {
     self.activeRestaurant(restaurant);
@@ -234,16 +225,24 @@ var ViewModel = function() {
   var searchSuccessHandler = function(data) {
     // Remove current current restaurant data
     self.restaurants.removeAll();
-    // Map needed data to an object
-    // TODO: might be able to use `map` here instead
+    // Create new restaurants from yelp data
     data.businesses.forEach(function(business) {
       // Check if business is within distance, otherwise skip.
       // Reasoning: https://github.com/Yelp/yelp-api/issues/95
       if (business.distance > self.activeRadiusFilter().value) {
         return;
       }
-      // Turn yelp data into an internal restaurant object
-      var restaurant = self.mapYelp2Local(business);
+      // Construct new restaurant object
+      var restaurant = new Restaurant(business);
+      // TODO: this might be able to be added as computed ko on the object itself.
+      // Set restaurant eatlist state (true if on eatlist)
+      restaurant.eatlistState = ko.observable(self.eatlist.indexOf(business.id) !== -1);
+      // TODO: this can be tracked when eatlist changes
+      restaurant.eatlistState.subscribe(function() {
+        console.log('Eatlist state changed');
+        // Save eatlist to local storage
+        self.saveEatlist();
+      });
       // Add new restaurant to `restaurants` observable array
       self.restaurants.push(restaurant);
     });
@@ -256,7 +255,7 @@ var ViewModel = function() {
   };
 
   // Display markers on google map
-  var newMarkers = function() {
+  var displayNewMarkers = function() {
     removeAllMarkers(); // Remove the existing markers
     centerMap(locationCenter); // Center map to default location
     // Create markers from restaurant list, and display
