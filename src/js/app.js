@@ -222,7 +222,7 @@ var ViewModel = function() {
       restaurant.eatlistState.subscribe(function() {
         console.log('Eatlist state changed');
         // Save eatlist to local storage
-        self.saveEatlist();
+        saveEatlist();
       });
       // Add new restaurant to `restaurants` observable array
       self.restaurants.push(restaurant);
