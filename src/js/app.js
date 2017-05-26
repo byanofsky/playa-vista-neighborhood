@@ -129,7 +129,6 @@ var ViewModel = function() {
   // Toggle active class on list items
   self.selectListRestaurant = function(restaurant) {
     self.activeRestaurant(restaurant);
-    selectMarker(restaurant.marker, restaurant);
   };
   // Toggle offcanvas restaurant list
   self.toggleOffcanvas = function() {
@@ -137,7 +136,7 @@ var ViewModel = function() {
     // Check if Google maps API has loaded
     if (typeof google !== "undefined" && typeof google.maps !== "undefined") {
       // Trigger resize for map since #map-container changes size
-      google.maps.event.trigger(map, 'resize');
+      google.maps.event.trigger(mapInstance.map, 'resize');
     }
   };
   // Toggle restaurant on eatlist
@@ -163,6 +162,10 @@ var ViewModel = function() {
   // When change active radius filter, save it to localStorage
   self.activeRadiusFilter.subscribe(function() {
     localStorage.activeRadiusFilter = JSON.stringify(self.activeRadiusFilter());
+  });
+  // When active restaurant changed, update map
+  self.activeRestaurant.subscribe(function(newRestaurant) {
+    mapInstance.selectMarker(newRestaurant.marker, newRestaurant);
   });
   // Listen when dataLoading tracker switches to false and fire map markers.
   // When dataLoading goes from true to false, data has just completed loading
@@ -239,12 +242,12 @@ var ViewModel = function() {
     createAllMarkers();
     displayAllMarkers();
     // Adjust map bounds to fit all markers
-    fitRestaurantMarkers(self.restaurants());
+    mapInstance.fitRestaurantMarkers(self.restaurants());
   };
   // Cycle through restaurants and create markers
   var createAllMarkers = function() {
     self.restaurants().forEach(function(restaurant) {
-      var marker = createMarker(restaurant);
+      var marker = mapInstance.createMarker(restaurant);
       // Create a marker, and assign to restaurant
       self.markers.push(marker);
       restaurant.marker = marker;
@@ -253,7 +256,7 @@ var ViewModel = function() {
   // Cycle through markers and assign them to map (make them visible)
   var displayAllMarkers = function() {
     self.markers.forEach(function(marker) {
-      marker.setMap(map);
+      marker.setMap(mapInstance.map);
     });
   };
   // Remove all markers from google map
@@ -265,7 +268,7 @@ var ViewModel = function() {
   };
   // Center map to latLng location
   var centerMap = function(latLng) {
-    map.setCenter(latLng);
+    mapInstance.map.setCenter(latLng);
   };
   // Save eatlist to localStorage
   var saveEatlist = function() {
