@@ -23,13 +23,14 @@ var ViewModel = function() {
   // Initialize ViewModel
   self.init = function() {
     // Load eatlist from localStorage
-    self.loadEatlist();
+    loadEatlist();
     // Load options from localStorage
-    self.loadOptions();
+    loadOptions();
     // Perform initial search
     self.search();
   };
 
+  // Data
   // Track restaurant data
   self.restaurants = ko.observableArray();
   // Restaurant map markers
@@ -78,6 +79,7 @@ var ViewModel = function() {
   // Will be true if yelp api data load fails.
   self.retrySearchStatus = ko.observable(false);
 
+  // Behavior
   // Perform a yelp restaurant search, using activeCategory
   // and activeRadiusFilter as input
   self.search = function() {
@@ -124,21 +126,6 @@ var ViewModel = function() {
   self.filterEatlist = function() {
     console.log('eatlist triggered');
   };
-
-  // Listen when dataLoading tracker switches to false and fire map markers.
-  // When dataLoading goes from true to false, data has just completed loading
-  // from map and restaurant data calls.
-  // This is because these functions require google maps api & restaurant data
-  // to be loaded.
-  self.dataLoading.subscribe(function(newValue) {
-    if (newValue === false) {
-      console.log('Map and restaurant data has completed loading.');
-      console.log('Mapping markers.');
-      displayNewMarkers();
-    }
-  });
-
-
   // Toggle active class on list items
   self.selectListRestaurant = function(restaurant) {
     self.activeRestaurant(restaurant);
@@ -167,23 +154,8 @@ var ViewModel = function() {
     }
     this.eatlistState(newVal);
   };
-  // Save eatlist to localStorage
-  self.saveEatlist = function() {
-    localStorage.eatlist = JSON.stringify(self.eatlist());
-    console.log('Eatlist saved to localStorage');
-  };
-  // Load eatlist from localStorage
-  self.loadEatlist = function() {
-    // Load eatlist if it exists in local storage, or initialize empty array
-    // TODO: should not be hasownproperty, but not undefined
-    self.eatlist(localStorage.hasOwnProperty('eatlist') ?
-      JSON.parse(localStorage.eatlist) : []);
-  };
-  // Load options data from localStorage
-  self.loadOptions = function() {
-    self.activeCategory(localStorage.activeCategory ? JSON.parse(localStorage.activeCategory) : self.defaultCategory);
-    self.activeRadiusFilter(localStorage.activeRadiusFilter ? JSON.parse(localStorage.activeRadiusFilter) : self.defaultRadiusFilter);
-  };
+
+  // Subscriptions
   // When change active category, save it to localStorage
   self.activeCategory.subscribe(function() {
     localStorage.activeCategory = JSON.stringify(self.activeCategory());
@@ -192,7 +164,18 @@ var ViewModel = function() {
   self.activeRadiusFilter.subscribe(function() {
     localStorage.activeRadiusFilter = JSON.stringify(self.activeRadiusFilter());
   });
-
+  // Listen when dataLoading tracker switches to false and fire map markers.
+  // When dataLoading goes from true to false, data has just completed loading
+  // from map and restaurant data calls.
+  // This is because these functions require google maps api & restaurant data
+  // to be loaded.
+  self.dataLoading.subscribe(function(newValue) {
+    if (newValue === false) {
+      console.log('Map and restaurant data has completed loading.');
+      console.log('Mapping markers.');
+      displayNewMarkers();
+    }
+  });
 
   // Perform yelp search, with category and radiusFilter parameters
   var yelpRestaurantSearch = function(category, radiusFilter) {
@@ -248,7 +231,6 @@ var ViewModel = function() {
     console.log('Something went wrong on server: ' + data.responseText);
     self.retrySearchStatus(true);
   };
-
   // Display markers on google map
   var displayNewMarkers = function() {
     removeAllMarkers(); // Remove the existing markers
@@ -281,9 +263,26 @@ var ViewModel = function() {
     });
     self.markers = [];
   };
-  // // Center map to latLng location
+  // Center map to latLng location
   var centerMap = function(latLng) {
     map.setCenter(latLng);
+  };
+  // Save eatlist to localStorage
+  var saveEatlist = function() {
+    localStorage.eatlist = JSON.stringify(self.eatlist());
+    console.log('Eatlist saved to localStorage');
+  };
+  // Load eatlist from localStorage
+  var loadEatlist = function() {
+    // Load eatlist if it exists in local storage, or initialize empty array
+    // TODO: should not be hasownproperty, but not undefined
+    self.eatlist(localStorage.hasOwnProperty('eatlist') ?
+      JSON.parse(localStorage.eatlist) : []);
+  };
+  // Load options data from localStorage
+  var loadOptions = function() {
+    self.activeCategory(localStorage.activeCategory ? JSON.parse(localStorage.activeCategory) : self.defaultCategory);
+    self.activeRadiusFilter(localStorage.activeRadiusFilter ? JSON.parse(localStorage.activeRadiusFilter) : self.defaultRadiusFilter);
   };
 };
 
