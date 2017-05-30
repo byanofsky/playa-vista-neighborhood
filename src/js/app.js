@@ -178,6 +178,8 @@ var ViewModel = function() {
       self.eatlist.remove(this.id);
     }
     this.eatlistState(newVal);
+    // Marker should be added or removed, so refresh all markers
+    refreshMarkers();
   };
 
   // Subscriptions
@@ -195,10 +197,7 @@ var ViewModel = function() {
   });
   // When active filter changes, update map markers
   self.activeFilter.subscribe(function() {
-    // Hide all current map markers
-    hideAllMarkers();
-    // Display only filtered markers
-    displayMarkers();
+    refreshMarkers();
   });
   // Listen when dataLoading tracker switches to false and fire map markers.
   // When dataLoading goes from true to false, data has just completed loading
@@ -272,6 +271,12 @@ var ViewModel = function() {
   var resetMarkers = function() {
     removeAllMarkers();
     createAllMarkers();
+    displayMarkers();
+  };
+  // Refresh the current markers on the map.
+  // Hide (but don't delete) current map markers, and display new markers.
+  var refreshMarkers = function() {
+    hideAllMarkers();
     displayMarkers();
   };
   // Recenter map and display current map markers for filtered restaurants
