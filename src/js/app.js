@@ -193,6 +193,13 @@ var ViewModel = function() {
   self.activeRestaurant.subscribe(function(newRestaurant) {
     mapInstance.selectMarker(newRestaurant.marker, newRestaurant);
   });
+  // When active filter changes, update map markers
+  self.activeFilter.subscribe(function() {
+    // Hide all current map markers
+    hideAllMarkers();
+    // Display only filtered markers
+    displayMarkers();
+  });
   // Listen when dataLoading tracker switches to false and fire map markers.
   // When dataLoading goes from true to false, data has just completed loading
   // from map and restaurant data calls.
@@ -202,7 +209,7 @@ var ViewModel = function() {
     if (newValue === false) {
       console.log('Map and restaurant data has completed loading.');
       console.log('Mapping markers.');
-      displayNewMarkers();
+      resetMarkers();
     }
   });
 
@@ -260,15 +267,21 @@ var ViewModel = function() {
     console.log('Something went wrong on server: ' + data.responseText);
     self.retrySearchStatus(true);
   };
-  // Display markers on google map
-  var displayNewMarkers = function() {
-    removeAllMarkers(); // Remove the existing markers
-    centerMap(config.locationCenter); // Center map to default location
-    // Create markers from restaurant list, and display
+  // Delete all current markers when new restaurant data loaded,
+  // create new markers, and show new markers.
+  var resetMarkers = function() {
+    removeAllMarkers();
     createAllMarkers();
-    displayAllMarkers();
+    displayMarkers();
+  };
+  // Recenter map and display current map markers for filtered restaurants
+  var displayMarkers = function() {
+    // Center map to default location
+    centerMap(config.locationCenter);
     // Adjust map bounds to fit all markers
-    mapInstance.fitRestaurantMarkers(self.restaurants());
+    mapInstance.fitRestaurantMarkers(self.filteredRestaurants());
+    // Show map markers
+    showRestaurantMarkers(self.filteredRestaurants());
   };
   // Cycle through restaurants and create markers
   var createAllMarkers = function() {
@@ -279,17 +292,22 @@ var ViewModel = function() {
       restaurant.marker = marker;
     });
   };
-  // Cycle through markers and assign them to map (make them visible)
-  var displayAllMarkers = function() {
-    self.markers.forEach(function(marker) {
-      marker.setMap(mapInstance.map);
+  // Cycle through restaurants and maker their markers visible
+  var showRestaurantMarkers = function(restaurants) {
+    restaurants.forEach(function(restaurant) {
+      restaurant.marker.setMap(mapInstance.map);
     });
   };
-  // Remove all markers from google map
-  var removeAllMarkers = function() {
+  // Hide all markers from google map, but don't remove from markers array
+  var hideAllMarkers = function() {
     self.markers.forEach(function(marker) {
       marker.setMap(null);
     });
+  };
+  // Remove all markers from google map.
+  // Uses markers array in case restaurants have been deleted already.
+  var removeAllMarkers = function() {
+    hideAllMarkers();
     self.markers = [];
   };
   // Center map to latLng location
