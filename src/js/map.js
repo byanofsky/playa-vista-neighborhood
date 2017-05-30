@@ -35,6 +35,10 @@ var MapViewModel = function() {
   };
   // Adjust map bounds to fit all restaurant markers
   self.fitRestaurantMarkers = function(restaurants) {
+    // If there are no restaurants, just return
+    if (restaurants.length === 0) {
+      return;
+    }
     var bounds = new google.maps.LatLngBounds();
     restaurants.forEach(function(restaurant) {
       bounds.extend(restaurant.position);
