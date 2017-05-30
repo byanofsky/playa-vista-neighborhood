@@ -61,7 +61,11 @@
 
         <!-- Options display only on mobile -->
         <p class="navbar-text visible-xs-block">
-          <span data-bind="text: activeCategory().label"></span> within <span data-bind="text: activeRadiusFilter().label"></span>
+          <span data-bind="text: activeCategory().label"></span>
+          within
+          <span data-bind="text: activeRadiusFilter().label"></span>
+          filtering 
+          <span data-bind="text: activeFilter().label"></span>
         </p><!--/.navbar-text-->
 
         <!-- Options menu -->
@@ -116,7 +120,7 @@
       <div data-bind="css: { active: offcanvasActive }" class="row row-offcanvas">
         <!-- Restaurant list -->
         <div class="list sidebar-offcanvas col col-no-gutter col-xs-6 col-sm-3">
-          <div class="list-group" data-bind="foreach: restaurants">
+          <div class="list-group" data-bind="foreach: filteredRestaurants">
             <button type="button"
                     class="list-group-item"
                     data-bind="click: $root.selectListRestaurant,

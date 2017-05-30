@@ -63,6 +63,22 @@ var ViewModel = function() {
   ]);
   // Set default filter to 'all'
   self.activeFilter = ko.observable(self.filters()[0]);
+  // Show all restaurants, or filtered, depending on active filter.
+  // Help from: http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
+  self.filteredRestaurants = ko.computed(function() {
+    // Get value of current filter
+    var filter = self.activeFilter().value;
+    if (filter === 'all') {
+      // If filter `all`, show all restaurants
+      return self.restaurants();
+    } else {
+      // If a filter is specified, either show `eatlist` === `true` restaurants,
+      // or show with `false`
+      return ko.utils.arrayFilter(self.restaurants(), function(restaurant) {
+        return filter === 'eatlist' ? restaurant.eatlistState() : ! restaurant.eatlistState();
+      });
+    }
+  });
   // Radius/distance filters
   self.radiusFilters = ko.observableArray([
     // Value in meters
@@ -133,8 +149,8 @@ var ViewModel = function() {
     self.search();
   };
   // Filter results shown to only those on the eatlist
-  self.filterEatlist = function() {
-    console.log('eatlist triggered');
+  self.filterEatlist = function(filter) {
+    self.activeFilter(filter);
   };
   // Toggle active class on list items
   self.selectListRestaurant = function(restaurant) {
