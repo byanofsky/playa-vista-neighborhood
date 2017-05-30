@@ -55,6 +55,14 @@ var ViewModel = function() {
   self.defaultCategory = self.categories()[0];
   // Current active/selected category
   self.activeCategory = ko.observable();
+  // Favorite filters
+  self.filters = ko.observableArray([
+    { value: 'all', label: 'All'},
+    { value: 'eatlist', label: 'Favorited'},
+    { value: 'notEatlist', label: 'Not Favorited'}
+  ]);
+  // Set default filter to 'all'
+  self.activeFilter = ko.observable(self.filters()[0]);
   // Radius/distance filters
   self.radiusFilters = ko.observableArray([
     // Value in meters
