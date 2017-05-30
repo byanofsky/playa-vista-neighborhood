@@ -99,6 +99,12 @@ var MapViewModel = function() {
   };
 };
 
+// Callback when google maps api loads
 function initMap() {
   mapInstance = new MapViewModel();
+}
+
+// Error function is google maps fails to load
+function mapLoadFail() {
+  alert('Google Maps failed to load. Please reload the page.');
 }
