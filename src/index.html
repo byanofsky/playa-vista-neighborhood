@@ -64,7 +64,7 @@
           <span data-bind="text: activeCategory().label"></span>
           within
           <span data-bind="text: activeRadiusFilter().label"></span>
-          filtering 
+          filtering
           <span data-bind="text: activeFilter().label"></span>
         </p><!--/.navbar-text-->
 
@@ -120,6 +120,12 @@
       <div data-bind="css: { active: offcanvasActive }" class="row row-offcanvas">
         <!-- Restaurant list -->
         <div class="list sidebar-offcanvas col col-no-gutter col-xs-6 col-sm-3">
+          <!-- Display message if there are no restaurants and restaurant data has loaded -->
+          <!-- ko ifnot: filteredRestaurants().length || restaurantsLoading() -->
+            <div class="list-group-item">
+              There are no restaurants. Please broaden your search.
+            </div>
+          <!-- /ko -->
           <div class="list-group" data-bind="foreach: filteredRestaurants">
             <button type="button"
                     class="list-group-item"
