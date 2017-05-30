@@ -43,6 +43,19 @@ var MapViewModel = function() {
   };
   // When marker focused on (ie, click from list item), open info window
   self.selectMarker = function(marker, restaurant) {
+    // Check if a map marker is currently active.
+    // If it is, set icon back to default.
+    if (viewModelInstance.activeMarker !== null) {
+      viewModelInstance.activeMarker.setIcon();
+      viewModelInstance.activeMarker.setZIndex(0);
+    }
+    // Set new marker as active marker
+    viewModelInstance.activeMarker = marker;
+    // Change marker to blue
+    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
+    // Set Z Index so icon is visible above others
+    marker.setZIndex(999);
+    // Open infowindow
     self.openInfoWindow(marker, restaurant);
   };
   // Open infowindow on marker with defined content

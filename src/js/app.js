@@ -33,6 +33,8 @@ var ViewModel = function() {
   // Data
   // Track restaurant data
   self.restaurants = ko.observableArray();
+  // Track active map marker
+  self.activeMarker = null;
   // Restaurant map markers
   self.markers = [];
   // Current active/selected restaurant
